@@ -1,10 +1,3 @@
-#### Import the libraries
-import sys
-
-
-
-
-
 ######################################################################## GTK GUI (requires Tkinter)
 from Tkinter import *
 import tkFileDialog
