@@ -110,11 +110,11 @@ except:
 ### Solution to use (Vial valves: A=3, B=4, C=5, Rinse=2, Waste=0, Spray=1; when floating with .5 it always means that the valve links the selected vial to the waste, probably because .0 was not possible)
 try:
     solution_to_use = raw_input ("Select the solution to spray with (A,B,C or rinse) (default: A)\n")
-    if solution_to_use == "A":
+    if solution_to_use == "A" or solution_to_use == "a" or solution_to_use == 1:
         solution_to_use = int(3)
-    elif solution_to_use == "B":
+    elif solution_to_use == "B" or solution_to_use == "b" or solution_to_use == 2:
         solution_to_use = int(4)
-    elif solution_to_use == "C":
+    elif solution_to_use == "C" or solution_to_use == "c" or solution_to_use == 3:
         solution_to_use = int(5)
     elif solution_to_use == "rinse":
         solution_to_use = int(2)
