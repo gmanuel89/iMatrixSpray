@@ -17,7 +17,7 @@ if ".gcode" not in outputfile:
 
 
 ########### Input values (raw input)
-###
+### X,Y coordinates
 try:
     coordinates_of_spray_x_axis1 = float(raw_input ("Set the first x-axis coordinates of spraying (default: -60)\n"))
 except:
@@ -45,85 +45,103 @@ except:
 coordinates_of_spray_x_axis = [float(coordinates_of_spray_x_axis1), float(coordinates_of_spray_x_axis2)]
 coordinates_of_spray_y_axis = [float(coordinates_of_spray_y_axis1), float(coordinates_of_spray_y_axis2)]
 
-###
+### Height of the needle
 try:
-    height_of_the_needle = float(raw_input ("Set the height of the needle (default: 50)\n"))
+    height_of_the_needle = float(raw_input ("Set the height of the needle (default: 60)\n"))
 except:
-    height_of_the_needle = 50.0
+    height_of_the_needle = 60.0
 
 
-###
+### Distance between spray lines
 try:
     distance_between_lines = float (raw_input ("Set the distance between lines when spraying (default: 5)\n"))
 except:
     distance_between_lines = 5.0
 
 
-###
+### Speed of movement
 try:
     speed_of_movement = float (raw_input ("Set the speed of movement (max: 200, default: 150)\n"))
 except:
     speed_of_movement = 150.0
 
 
-###
+### Matrix density
 try:
     matrix_density = float (raw_input ("Set the density of the matrix on-tissue (in microlitres per squared centimeter) (max: 5, default: 1)\n"))
 except:
     matrix_density = 1.0
 
 
-###
+### Number of spray cycles
 try:
     number_of_spray_cycles = int (raw_input ("Set the number of spraying cycles (default:2)\n"))
 except:
     number_of_spray_cycles = 2
 
 
-###
+### Number of valve rinsing cycles
 try:
     number_of_valve_rinsing_cycles = int (raw_input ("Set the number of valve rinsing cycles (default: 5)\n"))
 except:
     number_of_valve_rinsing_cycles = 5
 
 
-###
+### Number of initial wash cycles
 try:
     number_of_initial_wash_cycles = int (raw_input ("Set the number of initial wash cycles (default: 5)\n"))
 except:
     number_of_initial_wash_cycles = 5
 
 
-###
-horizontal_spraying = raw_input ("Spray horizontally? (y or n, default: y)\n")
-if horizontal_spraying == "":
-    horizontal_spraying = "y"
-
-if horizontal_spraying == "y":
+### Horizontal spraying
+try:
+    horizontal_spraying = raw_input ("Spray horizontally? (y or n, default: y)\n")
+    if horizontal_spraying == "":
+        horizontal_spraying = "y"
+    if horizontal_spraying == "y":
+        horizontal_spraying = True
+    else:
+        horizontal_spraying == False
+except:
     horizontal_spraying = True
-else:
-    horizontal_spraying == False
+
+
+### Solution to use (Vial valves: A=3, B=4, C=5, Rinse=2, Waste=0, Spray=1; when floating with .5 it always means that the valve links the selected vial to the waste, probably because .0 was not possible)
+try:
+    solution_to_use = raw_input ("Select the solution to spray with (A,B,C or rinse) (default: A)\n")
+    if solution_to_use == "A":
+        solution_to_use = int(3)
+    elif solution_to_use == "B":
+        solution_to_use = int(4)
+    elif solution_to_use == "C":
+        solution_to_use = int(5)
+    elif solution_to_use == "rinse":
+        solution_to_use = int(2)
+    else:
+        solution_to_use = int(3)
+except:
+    solution_to_use = int(3)
 
 
 
 
 
 ############## Constant values
-coordinates_of_spray_z_axis = -80 + abs(height_of_the_needle) # Calculated
+coordinates_of_spray_z_axis = -90 + abs(height_of_the_needle) # Calculated
 max_speed_of_movement = 200
-max_height_of_the_needle = 80
 max_matrix_density = 5
 coordinates_of_washing_x_axis = 0
 coordinates_of_washing_y_axis = -110
 coordinates_of_washing_z_axis = -50
-coordinates_of_z_magnet = 16.5
+coordinates_of_z_rest = 16.5
 coordinates_of_z_axis_during_movement = -35
 initial_x_coordinates = 0
 initial_y_coordinates = 0
 initial_z_coordinates = 0
 max_x_coordinates = [-60, 60]
 max_y_coordinates = [-80, 80]
-max_z_coordinates = [-75, 0]
+max_z_coordinates = [-80, 0]
 spray_syringe_volume_per_travel = 16.7
 
 
@@ -141,8 +159,10 @@ if speed_of_movement == 0:
     speed_of_movement = 1
 
 # Needle height (Z coordinate)
-if coordinates_of_spray_z_axis < max_z_coordinates[0] or coordinates_of_spray_z_axis > max_z_coordinates[1]:
-    coordinates_of_spray_z_axis = -35
+if coordinates_of_spray_z_axis < max_z_coordinates[0]:
+    coordinates_of_spray_z_axis = max_z_coordinates[0]
+elif coordinates_of_spray_z_axis > max_z_coordinates[1]:
+    coordinates_of_spray_z_axis = max_z_coordinates[1]
 
 # Matrix density
 if matrix_density > max_matrix_density:
@@ -202,14 +222,14 @@ for s in go_to_wash_position:
     first_wash_block.append (s)
 
 # Define the washing sub-block
-first_wash_subblock = ["G1 V3.5 F%s\n" %max_speed_of_movement, "G4 S1\n", "G1 P4.2 F%s\n" %max_speed_of_movement, "G4 S1\n", "G1 V3 F%s\n" %max_speed_of_movement, "G4 S1\n", "G1 V0 F%s\n" %max_speed_of_movement, "G4 S1\n", "G1 P0 F%s\n" %(max_speed_of_movement/2), "G4 S1\n", "\n"]
+first_wash_subblock = ["G1 V%s.5 F%s\n" %(solution_to_use, max_speed_of_movement), "G4 S1\n", "G1 P4.2 F%s\n" %max_speed_of_movement, "G4 S1\n", "G1 V%s F%s\n" %(solution_to_use, max_speed_of_movement), "G4 S1\n", "G1 V0 F%s\n" %max_speed_of_movement, "G4 S1\n", "G1 P0 F%s\n" %(max_speed_of_movement/2), "G4 S1\n", "\n"]
 # Generate the definitive block based on the number of repetitions
 for i in range(number_of_initial_wash_cycles):
     for s in first_wash_subblock:
         first_wash_block.append (s)
 
 # After washing
-after_washing_block = ["M106\n", "G1 V3 F%s\n" %max_speed_of_movement, "G4 S1\n", "G1 P2 F%s\n" %max_speed_of_movement, "G1 V1 F%s\n" %max_speed_of_movement, "G4 S1\n", "G1 F0.1\n", "G1 P0\n"]
+after_washing_block = ["M106\n", "G1 V%s F%s\n" %(solution_to_use, max_speed_of_movement), "G4 S1\n", "G1 P2 F%s\n" %max_speed_of_movement, "G1 V1 F%s\n" %max_speed_of_movement, "G4 S1\n", "G1 F0.1\n", "G1 P0\n"]
 # Generate the definitive block
 for s in after_washing_block:
     first_wash_block.append (s)
@@ -264,7 +284,7 @@ drying_block.append ("\n")
 
 ########################################################### Parking spray block
 parking_spray_block = [";;;;; parking spray\n"]
-parking_spray_subblock = ["G1 Z%s F%s\n" %(float(coordinates_of_z_axis_during_movement), max_speed_of_movement), "G1 X%s Y%s Z%s F%s\n" %(float(initial_x_coordinates), float(initial_y_coordinates), float(coordinates_of_z_axis_during_movement), max_speed_of_movement), "G1 Z%s F%s\n" %(float(coordinates_of_z_magnet), max_speed_of_movement)]
+parking_spray_subblock = ["G1 Z%s F%s\n" %(float(coordinates_of_z_axis_during_movement), max_speed_of_movement), "G1 X%s Y%s Z%s F%s\n" %(float(initial_x_coordinates), float(initial_y_coordinates), float(coordinates_of_z_axis_during_movement), max_speed_of_movement), "G1 Z%s F%s\n" %(float(coordinates_of_z_rest), max_speed_of_movement)]
 # Generate the definitive block
 for s in parking_spray_subblock:
     parking_spray_block.append (s)
