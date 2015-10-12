@@ -1,3 +1,5 @@
+########### iMatrixSpray generator 2015.10.12
+
 ######################################################################## GTK GUI (requires Tkinter)
 from Tkinter import *
 import tkFileDialog
