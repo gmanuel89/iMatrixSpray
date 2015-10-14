@@ -71,6 +71,20 @@ except:
     solution_to_use_letter = "A"
 
 
+### Waiting time between two consecutive solutions
+try:
+    if len(solution_to_use) != 0:
+        waiting_phase_between_solutions_time = []
+        for i in (range(len(solution_to_use)-1)):
+            try:
+                waiting_phase_between_solutions_time_input = float(raw_input("Set how many seconds the machine has to wait before switching from solution %s to solution %s (default: 5)\n" %(solution_to_use_letter[i],solution_to_use_letter[i+1])))
+                waiting_phase_between_solutions_time.append(waiting_phase_between_solutions_time_input)
+            except:
+                waiting_phase_between_solutions_time.append(float(5))
+except:
+    waiting_phase_between_solutions_time = None
+
+
 ### X,Y coordinates (for each solution)
 # It returns errors with only one solution to be used (it has no len property), so use try/except
 try:
@@ -416,6 +430,19 @@ additional_waiting_time_after_spraying = ["G1 Z%s F%s\n" %(float(coordinates_of_
 
 
 
+###################################################### Waiting time before two different solutions
+try:
+    waiting_phase_between_solutions_block_sol = []
+    for sol in range(len(solution_to_use)-1):
+        waiting_phase_between_solutions_block = [";;;;;;;;;; waiting phase between switching between solutions\nG4 S%s\n\n" %waiting_phase_between_solutions_time[sol]]
+        waiting_phase_between_solutions_block_sol.append(waiting_phase_between_solutions_block)
+except:
+    waiting_phase_between_solutions_block = None
+
+
+
+
+
 ########################################################## Initialisation block (same for all)
 initialisation_block = [";;;;;;;;;; initialisation\n"]
 initialisation_subblock = ["G28XYZ\n", "G28P\n", "G90\n"]
@@ -751,7 +778,7 @@ except:
         for s in spray_subblock2:
             spray_block.append(s)
         # Add additional waiting phase
-        for s in additional_waiting_time_after_spraying:
+        for s in additional_waiting_time_after_spraying[sol]:
             spray_block.append(s)
     ######################################### The Y-axis stays fixed
     else:
@@ -1051,6 +1078,10 @@ with open(outputfile, "w") as f:
             # Syringe emptying block
             for line in cleaning_procedure_block_sol[sol]:
                 f.writelines(line)
+            # Waiting phase (not after the last spray cycle, only between spray cycles)
+            if sol < (range(len(solution_to_use))[-1]):
+                for line in waiting_phase_between_solutions_block_sol[sol]:
+                    f.writelines(line)
     except:
         # First wash block
         for line in first_wash_block:
