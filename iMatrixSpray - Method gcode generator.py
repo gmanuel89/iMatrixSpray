@@ -422,9 +422,13 @@ go_to_wash_position.append ("\n")
 
 
 
-########################################################## Additional waiting  time after spraying (same for all)
-additional_waiting_time_after_spraying = []
-additional_waiting_time_after_spraying = ["G1 Z%s F%s\n" %(float(coordinates_of_z_axis_during_movement), max_speed_of_movement), "G1 X%s Y%s Z%s F%s\n" %(float(coordinates_of_washing_x_axis), float(coordinates_of_washing_y_axis), float(coordinates_of_z_axis_during_movement), max_speed_of_movement), "G1 Z%s\n" %float(coordinates_of_washing_z_axis), "G4 S%s\n" %(additional_waiting_time_after_each_spray_cycle)]
+########################################################## Additional waiting  time after spraying (solution dependent)
+try:
+    additional_waiting_time_after_spraying = []
+    for sol in range(len(solution_to_use)):
+        additional_waiting_time_after_spraying.append(["G1 Z%s F%s\n" %(float(coordinates_of_z_axis_during_movement), max_speed_of_movement), "G1 X%s Y%s Z%s F%s\n" %(float(coordinates_of_washing_x_axis), float(coordinates_of_washing_y_axis), float(coordinates_of_z_axis_during_movement), max_speed_of_movement), "G1 Z%s\n" %float(coordinates_of_washing_z_axis), "G4 S%s\n" %(additional_waiting_time_after_each_spray_cycle[sol])])
+except:
+    additional_waiting_time_after_spraying = ["G1 Z%s F%s\n" %(float(coordinates_of_z_axis_during_movement), max_speed_of_movement), "G1 X%s Y%s Z%s F%s\n" %(float(coordinates_of_washing_x_axis), float(coordinates_of_washing_y_axis), float(coordinates_of_z_axis_during_movement), max_speed_of_movement), "G1 Z%s\n" %float(coordinates_of_washing_z_axis), "G4 S%s\n" %(additional_waiting_time_after_each_spray_cycle[sol])]
 
 
 
@@ -595,7 +599,7 @@ try:
             for s in spray_subblock2:
                 spray_block.append(s)
             # Add additional waiting phase
-            for s in additional_waiting_time_after_spraying:
+            for s in additional_waiting_time_after_spraying[sol]:
                 spray_block.append(s)
         ######################################### The Y-axis stays fixed
         else:
@@ -683,7 +687,7 @@ try:
             for s in spray_subblock2:
                 spray_block.append(s)
             # Add additional waiting phase
-            for s in additional_waiting_time_after_spraying:
+            for s in additional_waiting_time_after_spraying[sol]:
                 spray_block.append(s)
         # Leave a white line between blocks
         spray_block.append ("\n")
@@ -778,7 +782,7 @@ except:
         for s in spray_subblock2:
             spray_block.append(s)
         # Add additional waiting phase
-        for s in additional_waiting_time_after_spraying[sol]:
+        for s in additional_waiting_time_after_spraying:
             spray_block.append(s)
     ######################################### The Y-axis stays fixed
     else:
