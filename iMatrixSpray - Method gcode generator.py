@@ -1,4 +1,4 @@
-########### iMatrixSpray generator 2015.10.12
+########### iMatrixSpray generator 2015.10.15
 
 ######################################################################## GTK GUI (requires Tkinter)
 from Tkinter import *
@@ -199,6 +199,22 @@ except:
         matrix_density = float(1)
 
 
+### Number of initial wash cycles
+try:
+    number_of_initial_wash_cycles = []
+    for i in range(len(solution_to_use)):
+        try:
+            number_of_initial_wash_cycles_input = int (raw_input ("Set the number of initial wash cycles with solution %s (default: 5)\n" %(solution_to_use_letter[i])))
+            number_of_initial_wash_cycles.append(number_of_initial_wash_cycles_input)
+        except:
+            number_of_initial_wash_cycles.append(5)
+except:
+    try:
+        number_of_initial_wash_cycles = int (raw_input ("Set the number of initial wash cycles with solution %s (default: 5)\n" %solution_to_use_letter))
+    except:
+        number_of_initial_wash_cycles = 5
+
+
 ### Number of spray cycles
 try:
     number_of_spray_cycles = []
@@ -236,13 +252,13 @@ try:
     number_of_valve_rinsing_cycles = []
     for i in range(len(solution_to_use)):
         try:
-            number_of_valve_rinsing_cycles_input = int (raw_input ("Set the number of valve rinsing cycles (default: 5) (solution %s)\n" %(solution_to_use_letter[i])))
+            number_of_valve_rinsing_cycles_input = int (raw_input ("Set the number of valve rinsing cycles with the rinsing solution (default: 5) (for solution %s)\n" %(solution_to_use_letter[i])))
             number_of_valve_rinsing_cycles.append(number_of_valve_rinsing_cycles_input)
         except:
             number_of_valve_rinsing_cycles.append(5)
 except:
     try:
-        number_of_valve_rinsing_cycles = int (raw_input ("Set the number of valve rinsing cycles (default: 5) (solution %s)\n" %solution_to_use_letter))
+        number_of_valve_rinsing_cycles = int (raw_input ("Set the number of valve rinsing cycles with the rinsing solution (default: 5) (for solution %s)\n" %solution_to_use_letter))
     except:
         number_of_valve_rinsing_cycles = 5
 
@@ -252,22 +268,6 @@ try:
     drying_time = float(raw_input ("Set the drying time for the needle after rinsing (default: 8) (for all the solutions)\n"))
 except:
     drying_time = float(8)
-
-
-### Number of initial wash cycles
-try:
-    number_of_initial_wash_cycles = []
-    for i in range(len(solution_to_use)):
-        try:
-            number_of_initial_wash_cycles_input = int (raw_input ("Set the number of initial wash cycles (default: 5) (solution %s)\n" %(solution_to_use_letter[i])))
-            number_of_initial_wash_cycles.append(number_of_initial_wash_cycles_input)
-        except:
-            number_of_initial_wash_cycles.append(5)
-except:
-    try:
-        number_of_initial_wash_cycles = int (raw_input ("Set the number of initial wash cycles (default: 5) (solution %s)\n" %solution_to_use_letter))
-    except:
-        number_of_initial_wash_cycles = 5
 
 
 ### Horizontal spraying
@@ -300,7 +300,7 @@ except:
 
 
 
-############## Constant values
+####################################### Constant values
 try:
     coordinates_of_spray_z_axis = []
     for h in height_of_the_needle:
@@ -428,7 +428,7 @@ try:
     for sol in range(len(solution_to_use)):
         additional_waiting_time_after_spraying.append(["G1 Z%s F%s\n" %(float(coordinates_of_z_axis_during_movement), max_speed_of_movement), "G1 X%s Y%s Z%s F%s\n" %(float(coordinates_of_washing_x_axis), float(coordinates_of_washing_y_axis), float(coordinates_of_z_axis_during_movement), max_speed_of_movement), "G1 Z%s\n" %float(coordinates_of_washing_z_axis), "G4 S%s\n" %(additional_waiting_time_after_each_spray_cycle[sol])])
 except:
-    additional_waiting_time_after_spraying = ["G1 Z%s F%s\n" %(float(coordinates_of_z_axis_during_movement), max_speed_of_movement), "G1 X%s Y%s Z%s F%s\n" %(float(coordinates_of_washing_x_axis), float(coordinates_of_washing_y_axis), float(coordinates_of_z_axis_during_movement), max_speed_of_movement), "G1 Z%s\n" %float(coordinates_of_washing_z_axis), "G4 S%s\n" %(additional_waiting_time_after_each_spray_cycle[sol])]
+    additional_waiting_time_after_spraying = ["G1 Z%s F%s\n" %(float(coordinates_of_z_axis_during_movement), max_speed_of_movement), "G1 X%s Y%s Z%s F%s\n" %(float(coordinates_of_washing_x_axis), float(coordinates_of_washing_y_axis), float(coordinates_of_z_axis_during_movement), max_speed_of_movement), "G1 Z%s\n" %float(coordinates_of_washing_z_axis), "G4 S%s\n" %(additional_waiting_time_after_each_spray_cycle)]
 
 
 
