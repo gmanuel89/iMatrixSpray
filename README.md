@@ -50,7 +50,7 @@ G1 VX F200
 
 where the value X identifies the valve position.
 
-* When the number is integer, the command opens the correspondent valve. In order to withdraw solution, the syringe aspirates the selected amount of solvent with the valve closed, so that vacuum is generated and when the valve opens, the vacuum causes the solvent in the communicating vial to be taken into the syringe.
+* When the number is integer, the command opens the correspondent valve. In order to withdraw, the syringe aspirates the selected amount of solution with the valve closed, so that vacuum is generated, and when the valve opens up, the vacuum causes the solution in the communicating vial to be taken into the syringe.
 So for example, after the generation of 10mm of vacuum, the valve 3 is opened (G1 V3 F200) in order to withdraw 10mm of solution A into the syringe.
 In order to empty the syringe into the waste vial, the valve 0 has to be opened (G1 V0 F200) and the emptying command must be provided (G1 P0).
 * When a floating point number is provided, the command sets the valve in the rinsing position, putting the waste vial in communication with the selected vial.
