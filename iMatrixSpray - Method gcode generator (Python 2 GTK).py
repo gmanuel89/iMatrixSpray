@@ -328,6 +328,7 @@ spray_syringe_volume_per_travel = 16.7
 
 
 
+
 ################################################# Avoid that the machine breaks
 # Speed
 try:
@@ -438,7 +439,7 @@ except:
 try:
     waiting_phase_between_solutions_block_sol = []
     for sol in range(len(solution_to_use)-1):
-        waiting_phase_between_solutions_block = [";;;;;;;;;; waiting phase between switching between solutions\nG4 S%s\n\n" %waiting_phase_between_solutions_time[sol]]
+        waiting_phase_between_solutions_block = [";;;;;;;;;; waiting phase before switching between solutions\nG4 S%s\n\n" %waiting_phase_between_solutions_time[sol]]
         waiting_phase_between_solutions_block_sol.append(waiting_phase_between_solutions_block)
 except:
     waiting_phase_between_solutions_block = None
@@ -581,7 +582,7 @@ try:
                     x_positions.append(x_positions[i-3])
             ###### Values of P
             p_values = []
-            for i in range(number_of_y_positions/2):
+            for i in range(int(number_of_y_positions/2)):
                 p_values.append (float(-spray_syringe_y))
                 p_values.append (float(-spray_syringe_x))
             ###### Generate the final spray ssubblock
