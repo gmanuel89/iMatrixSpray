@@ -1,4 +1,4 @@
-########### iMatrixSpray generator 2015.10.15
+########### iMatrixSpray generator 2015.11.20
 
 ######################################################################## GTK GUI (requires Tkinter)
 from tkinter import *
@@ -292,7 +292,7 @@ except:
         if horizontal_spraying == "y":
             horizontal_spraying = True
         else:
-            horizontal_spraying == False
+            horizontal_spraying = False
     except:
         horizontal_spraying = True
 
