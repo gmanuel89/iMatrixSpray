@@ -1,4 +1,4 @@
-########### iMatrixSpray generator 2015.10.15
+########### iMatrixSpray generator 2015.11.20
 
 ######################################################################## GTK GUI (requires Tkinter)
 from Tkinter import *
@@ -292,7 +292,7 @@ except:
         if horizontal_spraying == "y":
             horizontal_spraying = True
         else:
-            horizontal_spraying == False
+            horizontal_spraying = False
     except:
         horizontal_spraying = True
 
@@ -765,7 +765,7 @@ except:
                 x_positions.append(x_positions[i-3])
         ###### Values of P
         p_values = []
-        for i in range(number_of_y_positions/2):
+        for i in range(int(number_of_y_positions/2)):
             p_values.append (float(-spray_syringe_y))
             p_values.append (float(-spray_syringe_x))
         ###### Generate the final spray ssubblock
