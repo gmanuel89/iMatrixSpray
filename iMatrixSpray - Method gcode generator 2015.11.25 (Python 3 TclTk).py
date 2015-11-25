@@ -1,4 +1,4 @@
-########### iMatrixSpray generator 2015.11.20
+########### iMatrixSpray generator 2015.11.25
 
 ######################################################################## GTK GUI (requires Tkinter)
 from tkinter import *
@@ -92,47 +92,45 @@ try:
     coordinates_of_spray_y_axis_sol = []
     for i in range(len(solution_to_use)):
         try:
-            coordinates_of_spray_x_axis_1 = float(input ("Set the first x-axis coordinates of spraying (default: -60) (solution %s)\n" %(solution_to_use_letter[i])))
+            coordinates_of_spray_x_axis = input("Set the x-axis coordinates of spraying (default: -60,60) (solution %s)\n[hint: Coordinates for the small area are (-30,30)]\n" %(solution_to_use_letter[i]))
+            # Convert it into a list
+            coordinates_of_spray_x_axis = coordinates_of_spray_x_axis.split(",")
+            # From strings to floating point numbers
+            for i in range(len(coordinates_of_spray_x_axis)):
+                coordinates_of_spray_x_axis[i] = float(coordinates_of_spray_x_axis[i])
         except:
-            coordinates_of_spray_x_axis_1 = float(-60)
+            coordinates_of_spray_x_axis = (float(-60), float(60))
         try:
-            coordinates_of_spray_x_axis_2 = float(input ("Set the second x-axis coordinates of spraying (default: 60) (solution %s)\n" %(solution_to_use_letter[i])))
+            coordinates_of_spray_y_axis = input("Set the y-axis coordinates of spraying (default: -80,80) (solution %s)\n[hint: Coordinates for the small area are (40,80)]\n" %(solution_to_use_letter[i]))
+            # Convert it into a list
+            coordinates_of_spray_y_axis = coordinates_of_spray_y_axis.split(",")
+            # From strings to floating point numbers
+            for i in range(len(coordinates_of_spray_y_axis)):
+                coordinates_of_spray_y_axis[i] = float(coordinates_of_spray_y_axis[i])
         except:
-            coordinates_of_spray_x_axis_2 = float(60)
-        try:
-            coordinates_of_spray_y_axis_1 = float(input ("Set the first y-axis coordinates of spraying (default: -80) (solution %s)\n" %(solution_to_use_letter[i])))
-        except:
-            coordinates_of_spray_y_axis_1 = float(-80)
-        try:
-            coordinates_of_spray_y_axis_2 = float(input ("Set the second y-axis coordinates of spraying (default: 80) (solution %s)\n" %(solution_to_use_letter[i])))
-        except:
-            coordinates_of_spray_y_axis_2 = float(80)
-        # Put it all together
-        coordinates_of_spray_x_axis = [coordinates_of_spray_x_axis_1, coordinates_of_spray_x_axis_2]
-        coordinates_of_spray_y_axis = [coordinates_of_spray_y_axis_1, coordinates_of_spray_y_axis_2]
+            coordinates_of_spray_y_axis = (float(-80), float(80))
         # Attach this to the final list of coordinates
         coordinates_of_spray_x_axis_sol.append(coordinates_of_spray_x_axis)
         coordinates_of_spray_y_axis_sol.append(coordinates_of_spray_y_axis)
 except:
     try:
-        coordinates_of_spray_x_axis1 = float(input ("Set the first x-axis coordinates of spraying (default: -60) (solution %s)\n" %(solution_to_use_letter)))
+        coordinates_of_spray_x_axis = input("Set the x-axis coordinates of spraying (default: -60,60) (solution %s)\n[hint: Coordinates for the small area are (-30,30)]\n" %(solution_to_use_letter))
+        # Convert it into a list
+        coordinates_of_spray_x_axis = coordinates_of_spray_x_axis.split(",")
+        # From strings to floating point numbers
+        for i in range(len(coordinates_of_spray_x_axis)):
+            coordinates_of_spray_x_axis[i] = float(coordinates_of_spray_x_axis[i])
     except:
-        coordinates_of_spray_x_axis1 = float(-60)
+        coordinates_of_spray_x_axis = (float(-60), float(60))
     try:
-        coordinates_of_spray_x_axis2 = float(input ("Set the second x-axis coordinates of spraying (default: 60) (solution %s)\n" %(solution_to_use_letter)))
+        coordinates_of_spray_y_axis = input ("Set the y-axis coordinates of spraying (default: -80,80) (solution %s)\n[hint: Coordinates for the small area are (40,80)]\n" %(solution_to_use_letter))
+        # Convert it into a list
+        coordinates_of_spray_y_axis = coordinates_of_spray_y_axis.split(",")
+        # From strings to floating point numbers
+        for i in range(len(coordinates_of_spray_y_axis)):
+            coordinates_of_spray_y_axis[i] = float(coordinates_of_spray_y_axis[i])
     except:
-        coordinates_of_spray_x_axis2 = float(60)
-    try:
-        coordinates_of_spray_y_axis1 = float(input ("Set the first y-axis coordinates of spraying (default: -80) (solution %s)\n" %(solution_to_use_letter)))
-    except:
-        coordinates_of_spray_y_axis1 = float(-80)
-    try:
-        coordinates_of_spray_y_axis2 = float(input ("Set the second y-axis coordinates of spraying (default: 80) (solution %s)\n" %(solution_to_use_letter)))
-    except:
-        coordinates_of_spray_y_axis2 = float(80)
-    # Put it all together
-    coordinates_of_spray_x_axis = [float(coordinates_of_spray_x_axis1), float(coordinates_of_spray_x_axis2)]
-    coordinates_of_spray_y_axis = [float(coordinates_of_spray_y_axis1), float(coordinates_of_spray_y_axis2)]
+        coordinates_of_spray_y_axis = (float(-80), float(80))
 
 
 ### Height of the needle
@@ -274,27 +272,10 @@ except:
 try:
     horizontal_spraying = []
     for i in range(len(solution_to_use)):
-        try:
-            horizontal_spraying_input = input ("Spray horizontally? (y or n, default: y) (solution %s)\n" %(solution_to_use_letter[i]))
-            if horizontal_spraying_input == "":
-                horizontal_spraying_input = "y"
-            if horizontal_spraying_input == "y":
-                horizontal_spraying.append(True)
-            else:
-                horizontal_spraying.append(False)
-        except:
-            horizontal_spraying.append(True)
+        horizontal_spraying_input = input("Spray horizontally? (y or n, default: y) (solution %s)\n" %(solution_to_use_letter[i]))
+        horizontal_spraying.append(horizontal_spraying_input)
 except:
-    try:
-        horizontal_spraying = input ("Spray horizontally? (y or n, default: y) (solution %s)\n" %solution_to_use_letter)
-        if horizontal_spraying == "":
-            horizontal_spraying = "y"
-        if horizontal_spraying == "y":
-            horizontal_spraying = True
-        else:
-            horizontal_spraying = False
-    except:
-        horizontal_spraying = True
+    horizontal_spraying = input("Spray horizontally? (y or n, default: y) (solution %s)\n" %solution_to_use_letter)
 
 
 
@@ -324,6 +305,20 @@ max_x_coordinates = [-60, 60]
 max_y_coordinates = [-80, 80]
 max_z_coordinates = [-104, -24]
 spray_syringe_volume_per_travel = 16.7
+
+
+# Horizontal spraying
+try:
+    for i in range(len(horizontal_spraying)):
+        if (horizontal_spraying[i] == "y" or horizontal_spraying[i] == ''):
+            horizontal_spraying[i] = True
+        else:
+            horizontal_spraying[i] = False
+except:
+    if (horizontal_spraying == "y" or horizontal_spraying == ''):
+        horizontal_spraying = True
+    else:
+        horizontal_spraying = False
 
 
 
@@ -670,7 +665,7 @@ try:
                     y_positions.append(y_positions[i-3])
             ###### Values of P
             p_values = []
-            for i in range(number_of_x_positions/2):
+            for i in range(int(number_of_x_positions/2)):
                 p_values.append (float(-spray_syringe_x))
                 p_values.append (float(-spray_syringe_y))
             ###### Generate the final spray ssubblock
@@ -853,7 +848,7 @@ except:
                 y_positions.append(y_positions[i-3])
         ###### Values of P
         p_values = []
-        for i in range(number_of_x_positions/2):
+        for i in range(int(number_of_x_positions/2)):
             p_values.append (float(-spray_syringe_x))
             p_values.append (float(-spray_syringe_y))
         ###### Generate the final spray ssubblock
