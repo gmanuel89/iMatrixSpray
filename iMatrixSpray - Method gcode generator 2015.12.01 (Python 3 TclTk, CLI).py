@@ -1,3 +1,5 @@
+#! python3
+
 ########### iMatrixSpray generator 2015.12.01
 
 ######################################################################## GTK GUI (requires Tkinter)
@@ -110,7 +112,7 @@ try:
         waiting_phase_between_solutions_time = []
         for i in (range(len(solution_to_use)-1)):
             try:
-                waiting_phase_between_solutions_time_input = float(input("Set how many seconds the machine has to wait before switching from solution %s to solution %s (default: 5)\n" %(solution_to_use_letter[i],solution_to_use_letter[i+1])))
+                waiting_phase_between_solutions_time_input = float(input("Set how many seconds the machine has to wait before switching from solution '%s' to solution '%s' (default: 5)\n" %(solution_to_use_letter[i],solution_to_use_letter[i+1])))
                 waiting_phase_between_solutions_time.append(waiting_phase_between_solutions_time_input)
             except:
                 waiting_phase_between_solutions_time.append(float(5))
@@ -128,20 +130,20 @@ try:
     coordinates_of_spray_y_axis_sol = []
     for i in range(len(solution_to_use)):
         try:
-            coordinates_of_spray_x_axis = input("Set the x-axis coordinates of spraying (default: -60,60) (solution %s)\n[hint: Coordinates for the small area are (-30,30)]\n" %(solution_to_use_letter[i]))
+            coordinates_of_spray_x_axis = input("Set the x-axis coordinates of spraying (default: -60,60) (solution '%s')\n[hint: Coordinates for the small area are (-30,30)]\n" %(solution_to_use_letter[i]))
             # Convert it into a list
             coordinates_of_spray_x_axis = coordinates_of_spray_x_axis.split(",")
             # From strings to floating point numbers
-            for i in range(len(coordinates_of_spray_x_axis)):
+            for s in range(len(coordinates_of_spray_x_axis)):
                 coordinates_of_spray_x_axis[i] = float(coordinates_of_spray_x_axis[i])
         except:
             coordinates_of_spray_x_axis = (float(-60), float(60))
         try:
-            coordinates_of_spray_y_axis = input("Set the y-axis coordinates of spraying (default: -80,80) (solution %s)\n[hint: Coordinates for the small area are (40,80)]\n" %(solution_to_use_letter[i]))
+            coordinates_of_spray_y_axis = input("Set the y-axis coordinates of spraying (default: -80,80) (solution '%s')\n[hint: Coordinates for the small area are (40,80)]\n" %(solution_to_use_letter[i]))
             # Convert it into a list
             coordinates_of_spray_y_axis = coordinates_of_spray_y_axis.split(",")
             # From strings to floating point numbers
-            for i in range(len(coordinates_of_spray_y_axis)):
+            for s in range(len(coordinates_of_spray_y_axis)):
                 coordinates_of_spray_y_axis[i] = float(coordinates_of_spray_y_axis[i])
         except:
             coordinates_of_spray_y_axis = (float(-80), float(80))
@@ -150,20 +152,20 @@ try:
         coordinates_of_spray_y_axis_sol.append(coordinates_of_spray_y_axis)
 except:
     try:
-        coordinates_of_spray_x_axis = input("Set the x-axis coordinates of spraying (default: -60,60) (solution %s)\n[hint: Coordinates for the small area are (-30,30)]\n" %(solution_to_use_letter))
+        coordinates_of_spray_x_axis = input("Set the x-axis coordinates of spraying (default: -60,60) (solution '%s')\n[hint: Coordinates for the small area are (-30,30)]\n" %(solution_to_use_letter))
         # Convert it into a list
         coordinates_of_spray_x_axis = coordinates_of_spray_x_axis.split(",")
         # From strings to floating point numbers
-        for i in range(len(coordinates_of_spray_x_axis)):
+        for s in range(len(coordinates_of_spray_x_axis)):
             coordinates_of_spray_x_axis[i] = float(coordinates_of_spray_x_axis[i])
     except:
         coordinates_of_spray_x_axis = (float(-60), float(60))
     try:
-        coordinates_of_spray_y_axis = input ("Set the y-axis coordinates of spraying (default: -80,80) (solution %s)\n[hint: Coordinates for the small area are (40,80)]\n" %(solution_to_use_letter))
+        coordinates_of_spray_y_axis = input ("Set the y-axis coordinates of spraying (default: -80,80) (solution '%s')\n[hint: Coordinates for the small area are (40,80)]\n" %(solution_to_use_letter))
         # Convert it into a list
         coordinates_of_spray_y_axis = coordinates_of_spray_y_axis.split(",")
         # From strings to floating point numbers
-        for i in range(len(coordinates_of_spray_y_axis)):
+        for s in range(len(coordinates_of_spray_y_axis)):
             coordinates_of_spray_y_axis[i] = float(coordinates_of_spray_y_axis[i])
     except:
         coordinates_of_spray_y_axis = (float(-80), float(80))
@@ -177,13 +179,13 @@ try:
     height_of_the_needle = []
     for i in range(len(solution_to_use)):
         try:
-            height_of_the_needle_input = float(input ("Set the height of the needle (default: 60) (solution %s)\n" %(solution_to_use_letter[i])))
+            height_of_the_needle_input = float(input ("Set the height of the needle (default: 60) (solution '%s')\n" %(solution_to_use_letter[i])))
             height_of_the_needle.append(height_of_the_needle_input)
         except:
             height_of_the_needle.append(float(60))
 except:
     try:
-        height_of_the_needle = float(input ("Set the height of the needle (default: 60) (solution %s)\n" %(solution_to_use_letter)))
+        height_of_the_needle = float(input ("Set the height of the needle (default: 60) (solution '%s')\n" %(solution_to_use_letter)))
     except:
         height_of_the_needle = float(60)
 
@@ -196,13 +198,13 @@ try:
     distance_between_lines = []
     for i in range(len(solution_to_use)):
         try:
-            distance_between_lines_input = float (input ("Set the distance between lines when spraying (default: 5) (solution %s)\n" %(solution_to_use_letter[i])))
+            distance_between_lines_input = float (input ("Set the distance between lines when spraying (default: 5) (solution '%s')\n" %(solution_to_use_letter[i])))
             distance_between_lines.append(distance_between_lines_input)
         except:
             distance_between_lines.append(float(5))
 except:
     try:
-        distance_between_lines = float (input ("Set the distance between lines when spraying (default: 5) (solution %s)\n" %solution_to_use_letter))
+        distance_between_lines = float (input ("Set the distance between lines when spraying (default: 5) (solution '%s')\n" %solution_to_use_letter))
     except:
         distance_between_lines = float(5)
 
@@ -215,13 +217,13 @@ try:
     speed_of_movement = []
     for i in range(len(solution_to_use)):
         try:
-            speed_of_movement_input = float (input ("Set the speed of movement (max: 200, default: 150) (solution %s)\n" %(solution_to_use_letter[i])))
+            speed_of_movement_input = float (input ("Set the speed of movement (max: 200, default: 150) (solution '%s')\n" %(solution_to_use_letter[i])))
             speed_of_movement.append(speed_of_movement_input)
         except:
             speed_of_movement.append(float(150))
 except:
     try:
-        speed_of_movement = float (input ("Set the speed of movement (max: 200, default: 150) (solution %s)\n" %solution_to_use_letter))
+        speed_of_movement = float (input ("Set the speed of movement (max: 200, default: 150) (solution '%s')\n" %solution_to_use_letter))
     except:
         speed_of_movement = float(150)
 
@@ -234,13 +236,13 @@ try:
     matrix_density = []
     for i in range(len(solution_to_use)):
         try:
-            matrix_density_input = float (input ("Set the density of the matrix on-tissue (in microlitres per squared centimeter) (max: 5, default: 1) (solution %s)\n" %(solution_to_use_letter[i])))
+            matrix_density_input = float (input ("Set the density of the matrix on-tissue (in microlitres per squared centimeter) (max: 5, default: 1) (solution '%s')\n" %(solution_to_use_letter[i])))
             matrix_density.append(matrix_density_input)
         except:
             matrix_density.append(float(1))
 except:
     try:
-        matrix_density = float (input ("Set the density of the matrix on-tissue (in microlitres per squared centimeter) (max: 5, default: 1) (solution %s)\n" %solution_to_use_letter))
+        matrix_density = float (input ("Set the density of the matrix on-tissue (in microlitres per squared centimeter) (max: 5, default: 1) (solution '%s')\n" %solution_to_use_letter))
     except:
         matrix_density = float(1)
 
@@ -253,13 +255,13 @@ try:
     number_of_initial_wash_cycles = []
     for i in range(len(solution_to_use)):
         try:
-            number_of_initial_wash_cycles_input = int (input ("Set the number of initial wash cycles with solution %s (default: 5)\n" %(solution_to_use_letter[i])))
+            number_of_initial_wash_cycles_input = int (input ("Set the number of initial wash cycles with solution '%s' (default: 5)\n" %(solution_to_use_letter[i])))
             number_of_initial_wash_cycles.append(number_of_initial_wash_cycles_input)
         except:
             number_of_initial_wash_cycles.append(5)
 except:
     try:
-        number_of_initial_wash_cycles = int (input ("Set the number of initial wash cycles with solution %s (default: 5)\n" %solution_to_use_letter))
+        number_of_initial_wash_cycles = int (input ("Set the number of initial wash cycles with solution '%s' (default: 5)\n" %solution_to_use_letter))
     except:
         number_of_initial_wash_cycles = 5
 
@@ -272,13 +274,13 @@ try:
     number_of_spray_cycles = []
     for i in range(len(solution_to_use)):
         try:
-            number_of_spray_cycles_input = int (input ("Set the number of spraying cycles (default:2) (solution %s)\n" %(solution_to_use_letter[i])))
+            number_of_spray_cycles_input = int (input ("Set the number of spraying cycles (default:2) (solution '%s')\n" %(solution_to_use_letter[i])))
             number_of_spray_cycles.append(number_of_spray_cycles_input)
         except:
             number_of_spray_cycles.append(2)
 except:
     try:
-        number_of_spray_cycles = int (input ("Set the number of spraying cycles (default:2) (solution %s)\n" %solution_to_use_letter))
+        number_of_spray_cycles = int (input ("Set the number of spraying cycles (default:2) (solution '%s')\n" %solution_to_use_letter))
     except:
         number_of_spray_cycles = 2
 
@@ -291,13 +293,13 @@ try:
     additional_waiting_time_after_each_spray_cycle = []
     for i in range(len(solution_to_use)):
         try:
-            additional_waiting_time_after_each_spray_cycle_input = float (input ("Set the additional time (in seconds) to wait after each spraying cycle (default:0) (solution %s)\n" %(solution_to_use_letter[i])))
+            additional_waiting_time_after_each_spray_cycle_input = float (input ("Set the additional time (in seconds) to wait after each spraying cycle (default:0) (solution '%s')\n" %(solution_to_use_letter[i])))
             additional_waiting_time_after_each_spray_cycle.append(additional_waiting_time_after_each_spray_cycle_input)
         except:
             additional_waiting_time_after_each_spray_cycle.append(float(0))
 except:
     try:
-        additional_waiting_time_after_each_spray_cycle = float (input ("Set the additional time (in seconds) to wait after each spraying cycle (default:0) (solution %s)\n" %solution_to_use_letter))
+        additional_waiting_time_after_each_spray_cycle = float (input ("Set the additional time (in seconds) to wait after each spraying cycle (default:0) (solution '%s')\n" %solution_to_use_letter))
     except:
         additional_waiting_time_after_each_spray_cycle = float(0)
 
@@ -310,13 +312,13 @@ try:
     number_of_valve_rinsing_cycles = []
     for i in range(len(solution_to_use)):
         try:
-            number_of_valve_rinsing_cycles_input = int (input ("Set the number of valve rinsing cycles with the rinsing solution (default: 5) (for solution %s)\n" %(solution_to_use_letter[i])))
+            number_of_valve_rinsing_cycles_input = int (input ("Set the number of valve rinsing cycles with the rinsing solution (default: 5) (for solution '%s')\n" %(solution_to_use_letter[i])))
             number_of_valve_rinsing_cycles.append(number_of_valve_rinsing_cycles_input)
         except:
             number_of_valve_rinsing_cycles.append(5)
 except:
     try:
-        number_of_valve_rinsing_cycles = int (input ("Set the number of valve rinsing cycles with the rinsing solution (default: 5) (for solution %s)\n" %solution_to_use_letter))
+        number_of_valve_rinsing_cycles = int (input ("Set the number of valve rinsing cycles with the rinsing solution (default: 5) (for solution '%s')\n" %solution_to_use_letter))
     except:
         number_of_valve_rinsing_cycles = 5
 
@@ -326,7 +328,7 @@ except:
 
 ### Set the drying time
 try:
-    drying_time = float(input ("Set the drying time for the needle after rinsing (default: 8) (for all the solutions)\n"))
+    drying_time = float(input ("Set the drying time for the needle after rinsing (default: 8) (for all the solutions: '%s')\n" %(solution_to_use_letter)))
 except:
     drying_time = float(8)
 
@@ -338,10 +340,10 @@ except:
 try:
     horizontal_spraying = []
     for i in range(len(solution_to_use)):
-        horizontal_spraying_input = input("Spray horizontally? (y or n, default: y) (solution %s)\n" %(solution_to_use_letter[i]))
+        horizontal_spraying_input = input("Spray horizontally? (y or n, default: y) (solution '%s')\n" %(solution_to_use_letter[i]))
         horizontal_spraying.append(horizontal_spraying_input)
 except:
-    horizontal_spraying = input("Spray horizontally? (y or n, default: y) (solution %s)\n" %solution_to_use_letter)
+    horizontal_spraying = input("Spray horizontally? (y or n, default: y) (solution '%s')\n" %solution_to_use_letter)
 
 
 
