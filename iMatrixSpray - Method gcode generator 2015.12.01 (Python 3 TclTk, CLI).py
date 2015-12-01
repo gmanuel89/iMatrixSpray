@@ -1,4 +1,4 @@
-########### iMatrixSpray generator 2015.11.25
+########### iMatrixSpray generator 2015.12.01
 
 ######################################################################## GTK GUI (requires Tkinter)
 from tkinter import *
@@ -7,7 +7,7 @@ import tkinter.messagebox
 ########### Where to save the output file
 tkinter.Tk().withdraw()
 tkinter.messagebox.showinfo(title="File selection", message="Select where to save the gcode file")
-# Where to save the CSV file
+# Where to save the GCODE file
 tkinter.Tk().withdraw()
 outputfile = tkinter.filedialog.asksaveasfilename (defaultextension='.gcode', filetypes=[('gcode files','.gcode')])
 ### Add the extension to the file automatically
@@ -21,7 +21,7 @@ if ".gcode" not in outputfile:
 ########################################## INPUT VALUES (raw input)
 ### Solution to use (Vial valves: A=3, B=4, C=5, Rinse=2, Waste=0, Spray=1; when floating with .5 it always means that the valve links the selected vial to the waste, probably because .0 was not possible)
 try:
-    solution_to_use_input = input ("Select the solution(s) to spray with (A,B,C or rinse) (default: A)\n")
+    solution_to_use_input = input("Select the solution(s) to spray with (A,B,C or rinse) (default: A)\n")
     solution_to_use = []
     solution_to_use_letter = []
     # Determine the character used for separating the values (comma, space, etc)
@@ -71,6 +71,39 @@ except:
     solution_to_use_letter = "A"
 
 
+
+
+
+### Rename the solutions
+new_names = input("Rename the solution(s) to spray with (separate the labels by commas)(press enter to skip renaming)\n")
+
+if new_names != "":
+    # Generate the list of names
+    solution_to_use_new = new_names.split(",")
+    # Stripping
+    for s in range(len(solution_to_use_new)):
+        solution_to_use_new[s] = solution_to_use_new[s].strip()
+    # Rename the solutions (only if there is a match with the solutions to use)
+    if len(solution_to_use_new) == len(solution_to_use):
+        solution_to_use_letter = solution_to_use_new
+    # Mistake: the user inserted too few solutions
+    elif len(solution_to_use_new) < len(solution_to_use):
+        # Insert the renamed solution only if it's there, otherwise leave the default label
+        for z in range(len(solution_to_use)):
+            try:
+                solution_to_use_letter[z] = solution_to_use_new[z]
+            except:
+                solution_to_use_letter[z] = solution_to_use_letter[z]
+    # Mistake: the user inserted too many solutions
+    elif len(solution_to_use_new) > len(solution_to_use):
+        solution_to_use_letter = solution_to_use_letter
+else:
+    solution_to_use_letter = solution_to_use_letter
+
+
+
+
+
 ### Waiting time between two consecutive solutions
 try:
     if len(solution_to_use) != 0:
@@ -83,6 +116,9 @@ try:
                 waiting_phase_between_solutions_time.append(float(5))
 except:
     waiting_phase_between_solutions_time = None
+
+
+
 
 
 ### X,Y coordinates (for each solution)
@@ -133,6 +169,9 @@ except:
         coordinates_of_spray_y_axis = (float(-80), float(80))
 
 
+
+
+
 ### Height of the needle
 try:
     height_of_the_needle = []
@@ -147,6 +186,9 @@ except:
         height_of_the_needle = float(input ("Set the height of the needle (default: 60) (solution %s)\n" %(solution_to_use_letter)))
     except:
         height_of_the_needle = float(60)
+
+
+
 
 
 ### Distance between spray lines
@@ -165,6 +207,9 @@ except:
         distance_between_lines = float(5)
 
 
+
+
+
 ### Speed of movement
 try:
     speed_of_movement = []
@@ -179,6 +224,9 @@ except:
         speed_of_movement = float (input ("Set the speed of movement (max: 200, default: 150) (solution %s)\n" %solution_to_use_letter))
     except:
         speed_of_movement = float(150)
+
+
+
 
 
 ### Matrix density
@@ -197,6 +245,9 @@ except:
         matrix_density = float(1)
 
 
+
+
+
 ### Number of initial wash cycles
 try:
     number_of_initial_wash_cycles = []
@@ -211,6 +262,9 @@ except:
         number_of_initial_wash_cycles = int (input ("Set the number of initial wash cycles with solution %s (default: 5)\n" %solution_to_use_letter))
     except:
         number_of_initial_wash_cycles = 5
+
+
+
 
 
 ### Number of spray cycles
@@ -229,6 +283,9 @@ except:
         number_of_spray_cycles = 2
 
 
+
+
+
 ### Additional time to wait after each spray cycle
 try:
     additional_waiting_time_after_each_spray_cycle = []
@@ -243,6 +300,9 @@ except:
         additional_waiting_time_after_each_spray_cycle = float (input ("Set the additional time (in seconds) to wait after each spraying cycle (default:0) (solution %s)\n" %solution_to_use_letter))
     except:
         additional_waiting_time_after_each_spray_cycle = float(0)
+
+
+
 
 
 ### Number of valve rinsing cycles
@@ -261,11 +321,17 @@ except:
         number_of_valve_rinsing_cycles = 5
 
 
+
+
+
 ### Set the drying time
 try:
     drying_time = float(input ("Set the drying time for the needle after rinsing (default: 8) (for all the solutions)\n"))
 except:
     drying_time = float(8)
+
+
+
 
 
 ### Horizontal spraying
