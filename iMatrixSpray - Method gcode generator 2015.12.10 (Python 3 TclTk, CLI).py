@@ -1,6 +1,6 @@
 #! python3
 
-########### iMatrixSpray generator 2015.12.01
+########### iMatrixSpray generator 2015.12.10
 
 ######################################################################## GTK GUI (requires Tkinter)
 from tkinter import *
@@ -22,8 +22,10 @@ if ".gcode" not in outputfile:
 
 ########################################## INPUT VALUES (raw input)
 ### Solution to use (Vial valves: A=3, B=4, C=5, Rinse=2, Waste=0, Spray=1; when floating with .5 it always means that the valve links the selected vial to the waste, probably because .0 was not possible)
+solution_to_use_input = input("Select the solution(s) to spray with (A,B,C or rinse) (default: A)\n")
+
+# More letters...
 try:
-    solution_to_use_input = input("Select the solution(s) to spray with (A,B,C or rinse) (default: A)\n")
     solution_to_use = []
     solution_to_use_letter = []
     # Determine the character used for separating the values (comma, space, etc)
@@ -68,9 +70,23 @@ try:
             else:
                 solution_to_use_letter.append(letter)
                 solution_to_use.append(int(3))
+# One letter...
 except:
-    solution_to_use = int(3)
-    solution_to_use_letter = "A"
+    if solution_to_use_input == "A" or solution_to_use_input == "a" or solution_to_use_input == 1:
+        solution_to_use_letter = "A"
+        solution_to_use = int(3)
+    elif solution_to_use_input == "B" or solution_to_use_input == "b" or solution_to_use_input == 2:
+        solution_to_use_letter = "B"
+        solution_to_use = int(4)
+    elif solution_to_use_input == "C" or solution_to_use_input == "c" or solution_to_use_input == 3:
+        solution_to_use_letter = "C"
+        solution_to_use = int(5)
+    elif solution_to_use_input == "rinse":
+        solution_to_use_letter = "rinse"
+        solution_to_use = int(2)
+    else:
+        solution_to_use_letter = "A"
+        solution_to_use = int(3)
 
 
 
@@ -135,7 +151,7 @@ try:
             coordinates_of_spray_x_axis = coordinates_of_spray_x_axis.split(",")
             # From strings to floating point numbers
             for s in range(len(coordinates_of_spray_x_axis)):
-                coordinates_of_spray_x_axis[i] = float(coordinates_of_spray_x_axis[i])
+                coordinates_of_spray_x_axis[s] = float(coordinates_of_spray_x_axis[s])
         except:
             coordinates_of_spray_x_axis = (float(-60), float(60))
         try:
@@ -144,7 +160,7 @@ try:
             coordinates_of_spray_y_axis = coordinates_of_spray_y_axis.split(",")
             # From strings to floating point numbers
             for s in range(len(coordinates_of_spray_y_axis)):
-                coordinates_of_spray_y_axis[i] = float(coordinates_of_spray_y_axis[i])
+                coordinates_of_spray_y_axis[s] = float(coordinates_of_spray_y_axis[s])
         except:
             coordinates_of_spray_y_axis = (float(-80), float(80))
         # Attach this to the final list of coordinates
@@ -157,7 +173,7 @@ except:
         coordinates_of_spray_x_axis = coordinates_of_spray_x_axis.split(",")
         # From strings to floating point numbers
         for s in range(len(coordinates_of_spray_x_axis)):
-            coordinates_of_spray_x_axis[i] = float(coordinates_of_spray_x_axis[i])
+            coordinates_of_spray_x_axis[s] = float(coordinates_of_spray_x_axis[s])
     except:
         coordinates_of_spray_x_axis = (float(-60), float(60))
     try:
@@ -166,7 +182,7 @@ except:
         coordinates_of_spray_y_axis = coordinates_of_spray_y_axis.split(",")
         # From strings to floating point numbers
         for s in range(len(coordinates_of_spray_y_axis)):
-            coordinates_of_spray_y_axis[i] = float(coordinates_of_spray_y_axis[i])
+            coordinates_of_spray_y_axis[s] = float(coordinates_of_spray_y_axis[s])
     except:
         coordinates_of_spray_y_axis = (float(-80), float(80))
 
