@@ -1,6 +1,6 @@
 #! python3
 
-########### iMatrixSpray generator 2015.12.10
+########### iMatrixSpray generator 2016.04.08
 
 ######################################################################## GTK GUI (requires Tkinter)
 from tkinter import *
@@ -96,24 +96,27 @@ except:
 new_names = input("Rename the solution(s) to spray with (separate the labels by commas)(press enter to skip renaming)\n")
 
 if new_names != "":
-    # Generate the list of names
-    solution_to_use_new = new_names.split(",")
-    # Stripping
-    for s in range(len(solution_to_use_new)):
-        solution_to_use_new[s] = solution_to_use_new[s].strip()
-    # Rename the solutions (only if there is a match with the solutions to use)
-    if len(solution_to_use_new) == len(solution_to_use):
-        solution_to_use_letter = solution_to_use_new
-    # Mistake: the user inserted too few solutions
-    elif len(solution_to_use_new) < len(solution_to_use):
-        # Insert the renamed solution only if it's there, otherwise leave the default label
-        for z in range(len(solution_to_use)):
-            try:
-                solution_to_use_letter[z] = solution_to_use_new[z]
-            except:
-                solution_to_use_letter[z] = solution_to_use_letter[z]
-    # Mistake: the user inserted too many solutions
-    elif len(solution_to_use_new) > len(solution_to_use):
+    try:
+        # Generate the list of names
+        solution_to_use_new = new_names.split(",")
+        # Stripping
+        for s in range(len(solution_to_use_new)):
+            solution_to_use_new[s] = solution_to_use_new[s].strip()
+        # Rename the solutions (only if there is a match with the solutions to use)
+        if len(solution_to_use_new) == len(solution_to_use):
+            solution_to_use_letter = solution_to_use_new
+        # Mistake: the user inserted too few solutions
+        elif len(solution_to_use_new) < len(solution_to_use):
+            # Insert the renamed solution only if it's there, otherwise leave the default label
+            for z in range(len(solution_to_use)):
+                try:
+                    solution_to_use_letter[z] = solution_to_use_new[z]
+                except:
+                    solution_to_use_letter[z] = solution_to_use_letter[z]
+        # Mistake: the user inserted too many solutions
+        elif len(solution_to_use_new) > len(solution_to_use):
+            solution_to_use_letter = solution_to_use_letter
+    except:
         solution_to_use_letter = solution_to_use_letter
 else:
     solution_to_use_letter = solution_to_use_letter
