@@ -1,6 +1,6 @@
 #! python3
 
-########### iMatrixSpray generator GUI - 2016.04.22
+########### iMatrixSpray generator GUI - 2016.04.29
 
 ######################################################################## GTK GUI (requires Tkinter)
 import tkinter, os
@@ -539,33 +539,12 @@ def dump_gcode_file_function():
     # Strip off the spaces (it always returns a list)
     for i in range(len(drying_time_splitted)):
         drying_time_splitted[i] = drying_time_splitted[i].strip()
-    drying_time = []
-    for i in range(len(drying_time_splitted)):
-        # If specified
-        if drying_time_splitted[i] != "":
-            drying_time_splitted[i] = float(drying_time_splitted[i])
-        # If not specified
-        else:
-            drying_time_splitted[i] = float(8)
-        # Append to the final list
-        drying_time.append(drying_time_splitted[i])
-    ## The number of solutions must be equal to the values
-    if len(solution_to_use) == len(drying_time):
-        pass
-    else:
-        # Calculate the difference
-        len_diff = len(solution_to_use) - len(drying_time)
-        if len_diff > 0:
-            # If there is only one coordinate, repeat it
-            if len(drying_time) == 1:
-                for j in range(len_diff):
-                    drying_time.append(drying_time[0])
-            # If there are more than one, add the default
-            elif len(drying_time) > 1:
-                for j in range(len_diff):
-                    drying_time.append(float(5))
-        elif len_diff < 0:
-            drying_time = drying_time[0:(len(solution_to_use))]
+    # Take only the first entry
+    try:
+        drying_time = float(drying_time_splitted[0])
+    except:
+        drying_time = float(8)
+    
     
     
     
