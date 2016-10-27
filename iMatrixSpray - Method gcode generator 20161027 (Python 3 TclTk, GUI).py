@@ -1,6 +1,6 @@
 #! python3
 
-########### iMatrixSpray generator GUI - 2016.04.29
+########### iMatrixSpray generator GUI - 2016.10.27
 
 ######################################################################## GTK GUI (requires Tkinter)
 import tkinter, os
@@ -35,7 +35,7 @@ spray_syringe_volume_per_travel = 16.7
 def select_output_folder_function():
     Tk().withdraw()
     messagebox.showinfo(title="Folder selection", message="Select where to dump the gcode file(s)")
-    # Where to save the GCODE file
+    # Where to save the GCODE file (escape function environment)
     global outputfolder
     outputfolder = filedialog.askdirectory ()
     # Just to confirm...
@@ -217,6 +217,69 @@ def dump_gcode_file_function():
         
         
         
+        #################### Heat bed presence
+        # Get values from the entry
+        heat_bed_presence = heat_bed_presence_entry.get()
+        # If specified
+        if heat_bed_presence == "":
+                heat_bed_presence = "y"
+        
+        
+        
+        
+        
+        #################### Heat bed height
+        # Get values from the entry
+        heat_bed_height = heat_bed_height_entry.get()
+        # If not specified
+        if heat_bed_height == "":
+                heat_bed_height = float(5)
+        # Convert it to float number
+        heat_bed_height = float(heat_bed_height)
+        
+        
+        
+        
+        
+        #################### Heat bed temperature
+        # Get values from the entry
+        heat_bed_temperature_input = heat_bed_temperature_entry.get()
+        # Split (it never fails, it generates a list)
+        heat_bed_temperature_splitted = heat_bed_temperature_input.split(",")
+        # Strip off the spaces (it always returns a list)
+        for i in range(len(heat_bed_temperature_splitted)):
+            heat_bed_temperature_splitted[i] = heat_bed_temperature_splitted[i].strip()
+        heat_bed_temperature = []
+        for i in range(len(heat_bed_temperature_splitted)):
+            # If specified
+            if heat_bed_temperature_splitted[i] != "":
+                heat_bed_temperature_splitted[i] = float(heat_bed_temperature_splitted[i])
+            # If not specified
+            else:
+                heat_bed_temperature_splitted[i] = float(0)
+            # Append to the final list
+            heat_bed_temperature.append(heat_bed_temperature_splitted[i])
+        ## The number of solutions must be equal to the values
+        if len(heat_bed_temperature) == len(solution_to_use):
+            pass
+        else:
+            # Calculate the difference
+            len_diff = len(solution_to_use) - len(heat_bed_temperature)
+            if len_diff > 0:
+                # If there is only one coordinate, repeat it
+                if len(heat_bed_temperature) == 1:
+                    for j in range(len_diff):
+                        heat_bed_temperature.append(heat_bed_temperature[0])
+                # If there are more than one, add the default
+                elif len(heat_bed_temperature) > 1:
+                    for j in range(len_diff):
+                        heat_bed_temperature.append(float(0))
+            elif len_diff < 0:
+                heat_bed_temperature = heat_bed_temperature[0:(len(solution_to_use))]
+        
+        
+        
+        
         
         #################### Height of the needle
         # Get values from the entry
@@ -230,10 +293,10 @@ def dump_gcode_file_function():
         for i in range(len(height_of_the_needle_splitted)):
             # If specified
             if height_of_the_needle_splitted[i] != "":
-                height_of_the_needle_splitted[i] = float(height_of_the_needle_splitted[i])
+                height_of_the_needle_splitted[i] = float(height_of_the_needle_splitted[i])+heat_bed_height
             # If not specified
             else:
-                height_of_the_needle_splitted[i] = float(60)
+                height_of_the_needle_splitted[i] = float(60+heat_bed_height)
             # Append to the final list
             height_of_the_needle.append(height_of_the_needle_splitted[i])
         ## The number of solutions must be equal to the values
@@ -250,7 +313,7 @@ def dump_gcode_file_function():
                 # If there are more than one, add the default
                 elif len(height_of_the_needle) > 1:
                     for j in range(len_diff):
-                        height_of_the_needle.append(float(60))
+                        height_of_the_needle.append(float(60+heat_bed_height))
             elif len_diff < 0:
                 height_of_the_needle = height_of_the_needle[0:(len(solution_to_use))]
         
@@ -590,11 +653,11 @@ def dump_gcode_file_function():
                         horizontal_spraying.append("y")
             elif len_diff < 0:
                 horizontal_spraying = horizontal_spraying[0:(len(solution_to_use))]
-        
-        
-        
-        
-        
+                
+                
+                
+                
+                
         ####################################### Constant values
         try:
             coordinates_of_spray_z_axis = []
@@ -726,7 +789,7 @@ def dump_gcode_file_function():
         
         
         ########################################################## Initialisation block (same for all)
-        initialisation_block = [";;;;;;;;;; initialisation\n"]
+        initialisation_block = [";;;;;;;;;;;;;;;;;;;; iMatrixSpray gcode method generator\n\n", ";;;;;;;;;; initialisation\n"]
         initialisation_subblock = ["G28XYZ\n", "G28P\n", "G90\n"]
         # Generate the definitive block
         for s in initialisation_subblock:
@@ -1335,6 +1398,21 @@ def dump_gcode_file_function():
         
         
         
+        ############################################################## Temperature block (same for all)
+        try:
+            heat_bed_temperature_block_sol = []
+            for sol in range(len(solution_to_use)):
+                heat_bed_temperature_block = [";;;;;;;;;; heat bed temperature\n", "M140 S%s\n" %(heat_bed_temperature[sol]), "\n"]
+                heat_bed_temperature_block_sol.append(heat_bed_temperature_block)
+        except:
+            heat_bed_temperature_block = [";;;;;;;;;; heat bed temperature\n", "M140 S%s\n" %(heat_bed_temperature), "\n"]
+        
+        
+        
+        
+        
+        
+        
         
         
         
@@ -1354,6 +1432,9 @@ def dump_gcode_file_function():
             try:
             #### Solution dependent blocks
                 for sol in range(len(solution_to_use)):
+                    # Bring the heat bed to the desired temperature
+                    for line in heat_bed_temperature_block_sol[sol]:
+                        f.writelines(line)
                     # First wash block
                     for line in first_wash_block_sol[sol]:
                         f.writelines(line)
@@ -1371,6 +1452,9 @@ def dump_gcode_file_function():
                         for line in waiting_phase_between_solutions_block_sol[sol]:
                             f.writelines(line)
             except:
+                # Bring the heat bed to the desired temperature
+                for line in heat_bed_temperature_block:
+                    f.writelines(line)
                 # First wash block
                 for line in first_wash_block:
                     f.writelines(line)
@@ -1448,20 +1532,23 @@ window.resizable(True,True)
 title_label = Label(window, text="iMatrixSpray method generator").grid(row=0,column=1)
 solution_to_use_label = Label(window, text="Solution(s) to spray with\n(A,B,C or rinse) (default: A)\n").grid(row=1, column=0)
 new_names_label = Label(window, text="Rename the solution(s) to spray with\n(separate the labels with commas)").grid(row=2,column=0)
-waiting_phase_between_solutions_time_label = Label(window, text="Set how many seconds the machine has to wait\nbefore switching between two consecutive solutions\n(separate the times with commas) (default: 5)").grid(row=3, column=0)
+waiting_phase_between_solutions_time_label = Label(window, text="Set how much the device has to wait\nbefore switching between two consecutive solutions\n(separate the times with commas) (default: 5s)").grid(row=3, column=0)
 coordinates_of_spray_x_axis_label = Label(window, text="Set the x-axis coordinates of spraying (default: -60,60),\nin this format:x1,x2 x1,x2\n[hint: Coordinates for the small area are (-30,30)]").grid(row=4, column=0)
 coordinates_of_spray_y_axis_label = Label(window, text="Set the y-axis coordinates of spraying (default: -80,80),\nin this format:y1,y2 y1,y2\n[hint: Coordinates for the small area are (40,60)]").grid(row=5, column=0)
-height_of_the_needle_label = Label(window, text="Set the height of the needle\n(default: 60)").grid(row=6, column=0)
-distance_between_spray_lines_label = Label(window, text="Set the distance between lines when spraying\n(default: 5)").grid(row=7, column=0)
+height_of_the_needle_label = Label(window, text="Set the height of the needle (in millimeters)\n(default: 60mm)").grid(row=6, column=0)
+distance_between_spray_lines_label = Label(window, text="Set the distance between lines when spraying\n(default: 5mm)").grid(row=7, column=0)
 speed_of_movement_label = Label(window, text="Set the speed of movement\n(max: 200, default: 150)").grid(row=8, column=0)
 matrix_density_label = Label(window, text="Set the density of the matrix on-tissue\n(in microlitres per squared centimeter) (max: 5, default: 1)").grid(row=9, column=0)
 number_of_initial_wash_cycles_label = Label(window, text="Set the number of initial wash cycles\n(default: 5)").grid(row=10, column=0)
 number_of_spray_cycles_label = Label(window, text="Set the number of spraying cycles\n(default:2)").grid(row=11, column=0)
-additional_waiting_time_between_cycles_label = Label(window, text="Set the additional time (in seconds)\nto wait after each spraying cycle (default:0)").grid(row=12, column=0)
+additional_waiting_time_between_cycles_label = Label(window, text="Set the additional time (in seconds)\nto wait after each spraying cycle (default:0s)").grid(row=12, column=0)
 number_of_valve_rinsing_cycles_label = Label(window, text="Set the number of valve rinsing cycles\nwith the rinsing solution (default: 5)").grid(row=13, column=0)
-drying_time_label = Label(window, text="Set the drying time\nfor the needle after rinsing (default: 8)").grid(row=14, column=0)
+drying_time_label = Label(window, text="Set the drying time\nfor the needle after rinsing (default: 8s)").grid(row=14, column=0)
 horizontal_spraying_label = Label(window, text="Spray horizontally?\n(y or n, default: y)").grid(row=15, column=0)
 filename_label = Label(window, text="Set the name of the gcode method file\n(file extension is automatically added)").grid(row=16, column=0)
+heat_bed_presence_label = Label(window, text="Heat bed presence\n(y or n, default: y)").grid(row=8, column=2)
+heat_bed_height_label = Label(window, text="Heat bed height\n(default 5mm)").grid(row=9, column=2)
+heat_bed_temperature_label = Label(window, text="Heat bed temperature\n(default 0°C, do not heat)").grid(row=10, column=2)
 
 
 
@@ -1484,6 +1571,10 @@ number_of_valve_rinsing_cycles_entry = Entry(window)
 drying_time_entry = Entry(window)
 horizontal_spraying_entry = Entry(window)
 filename_entry = Entry(window)
+heat_bed_presence_entry = Entry(window)
+heat_bed_height_entry = Entry(window)
+heat_bed_temperature_entry = Entry(window)
+
 
 
 ########## Entry boxes (default values)
@@ -1502,25 +1593,32 @@ number_of_valve_rinsing_cycles_entry.insert(0,"5")
 drying_time_entry.insert(0,"8")
 horizontal_spraying_entry.insert(0,"y")
 filename_entry.insert(0,"iMatrixSpray method")
+heat_bed_presence_entry.insert(0,"y")
+heat_bed_height_entry.insert(0,"5")
+heat_bed_temperature_entry.insert(0,"0")
 
 
 ########## Positioning
-solution_to_use_entry.grid(row=1, column=2)
-new_names_entry.grid(row=2, column=2)
-waiting_phase_between_solutions_time_entry.grid(row=3, column=2)
-coordinates_of_spray_x_axis_entry.grid(row=4, column=2)
-coordinates_of_spray_y_axis_entry.grid(row=5, column=2)
-height_of_the_needle_entry.grid(row=6, column=2)
-distance_between_lines_entry.grid(row=7, column=2)
-speed_of_movement_entry.grid(row=8, column=2)
-matrix_density_entry.grid(row=9, column=2)
-number_of_initial_wash_cycles_entry.grid(row=10, column=2)
-number_of_spray_cycles_entry.grid(row=11, column=2)
-additional_waiting_time_after_each_spray_cycle_entry.grid(row=12, column=2)
-number_of_valve_rinsing_cycles_entry.grid(row=13, column=2)
-drying_time_entry.grid(row=14, column=2)
-horizontal_spraying_entry.grid(row=15, column=2)
-filename_entry.grid(row=16, column=2)
+solution_to_use_entry.grid(row=1, column=1)
+new_names_entry.grid(row=2, column=1)
+waiting_phase_between_solutions_time_entry.grid(row=3, column=1)
+coordinates_of_spray_x_axis_entry.grid(row=4, column=1)
+coordinates_of_spray_y_axis_entry.grid(row=5, column=1)
+height_of_the_needle_entry.grid(row=6, column=1)
+distance_between_lines_entry.grid(row=7, column=1)
+speed_of_movement_entry.grid(row=8, column=1)
+matrix_density_entry.grid(row=9, column=1)
+number_of_initial_wash_cycles_entry.grid(row=10, column=1)
+number_of_spray_cycles_entry.grid(row=11, column=1)
+additional_waiting_time_after_each_spray_cycle_entry.grid(row=12, column=1)
+number_of_valve_rinsing_cycles_entry.grid(row=13, column=1)
+drying_time_entry.grid(row=14, column=1)
+horizontal_spraying_entry.grid(row=15, column=1)
+filename_entry.grid(row=16, column=1)
+heat_bed_presence_entry.grid(row=8, column=3)
+heat_bed_height_entry.grid(row=9, column=3)
+heat_bed_temperature_entry.grid(row=10, column=3)
+
 
 
 # Buttons
