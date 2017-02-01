@@ -1542,6 +1542,33 @@ def dump_gcode_file_function():
 
 
 
+
+
+
+
+########## FUNCTION: Select where to save the GCODE method file
+def show_info():
+    Tk().withdraw()
+    messagebox.showinfo(title="Info", message="This Gcode Method Generator for the iMatrixSpray\nhas been written by MANUEL GALLI\nfrom the University of Milano-Bicocca\nin the Python 3 programming language\n\n\nGitHub page:\n\nhttps://github.com/gmanuel89/")
+
+
+
+
+
+
+
+
+
+########## FUNCTION: Select where to save the GCODE method file
+def show_guide():
+    Tk().withdraw()
+    messagebox.showinfo(title="Help", message="Help on the iMatrixSpray parameters can be found here:\n\nhttps://github.com/gmanuel89/iMatrixSpray/blob/master/README.md\n\n\n\n\nThe iMatrixSpray device official website is:\n\nhttps://imatrixspray.com/")
+
+
+
+
+
+
 ######################################################################
 
 
@@ -1705,7 +1732,7 @@ heat_bed_presence_entry = StringVar()
 
 
 
-########## Entry boxes (with positioning)
+########## Entry boxes / Radiobuttons (with positioning)
 solution_to_use_entry = Entry(window, font=entry_font, justify="center")
 new_names_entry = Entry(window, font=entry_font, justify="center")
 waiting_phase_between_solutions_time_entry = Entry(window, font=entry_font, justify="center")
@@ -1730,7 +1757,7 @@ heat_bed_temperature_entry = Entry(window, font=entry_font, justify="center")
 
 
 
-########## Entry boxes (default values)
+########## Entry boxes / Radiobuttons (default values)
 solution_to_use_entry.insert(0, "A")
 waiting_phase_between_solutions_time_entry.insert(0,"5")
 coordinates_of_spray_x_axis_entry.insert(0,"-30,30")
@@ -1778,11 +1805,15 @@ heat_bed_temperature_entry.grid(row=11, column=3)
 
 
 
-# Buttons
+########## Buttons (with positioning)
 Button(window, text='Quit', font = button_font, command=window.destroy).grid(row=17, column=0)
-#sticky=W, pady=4)
+# Dump the file
 Button(window, text='Dump gcode file', font = button_font, command=dump_gcode_file_function).grid(row=17, column=2)
-#sticky=W, pady=4)
+# Output folder
 Button(window, text="Browse output folder", font = button_font, command=select_output_folder_function).grid(row=17, column=1)
+# Info
+Button(window, text="Information", relief = "raised", bitmap="info", command=show_info).grid(row=1, column=2)
+# Guide
+Button(window, text="Guide", relief = "raised", bitmap="question", command=show_guide).grid(row=1, column=3)
 # Hold until quit
 window.mainloop()
