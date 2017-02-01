@@ -1549,7 +1549,7 @@ def dump_gcode_file_function():
 ########## FUNCTION: Select where to save the GCODE method file
 def show_info():
     Tk().withdraw()
-    messagebox.showinfo(title="Info", message="This Gcode Method Generator for the iMatrixSpray\nhas been written by MANUEL GALLI\nfrom the University of Milano-Bicocca\nin the Python 3 programming language\n\n\nGitHub page:\n\nhttps://github.com/gmanuel89/")
+    messagebox.showinfo(title="Info", message="This Gcode Method Generator for the iMatrixSpray\nhas been written by MANUEL GALLI\nfrom the University of Milano-Bicocca\nin the Python 3 programming language\n\n\n\n\nGitHub page:\n\nhttps://github.com/gmanuel89/\n\n\n\n\nThe source code can be found at:\n\nhttps://github.com/gmanuel89/iMatrixSpray/blob/master/iMatrixSpray - Method gcode generator (Python 3 TclTk, GUI).py")
 
 
 
