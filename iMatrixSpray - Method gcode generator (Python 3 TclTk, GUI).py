@@ -1,6 +1,8 @@
 #! python3
 
-######################################## iMatrixSpray generator GUI - 2017.02.01
+#################### iMatrixSpray generator GUI ####################
+
+# VERSION 2017.02.17
 
 
 
@@ -1569,6 +1571,20 @@ def show_guide():
 
 
 
+
+
+
+########## FUNCTION: Close the program
+def close_program_function():
+    # Collapse the GUI Tk window
+    window.destroy
+    # Quit the Python session
+    quit()
+
+
+
+
+
 ######################################################################
 
 
@@ -1622,78 +1638,88 @@ screen_height = window.winfo_screenheight()
 system_os = platform.system()
 os_release = platform.release()
 os_version = platform.version()
+# Default sizes (determined on a 1680x1050 screen) (in order to make them adjust to the size screen, the screen resolution should be retrieved)
+#title_font_size = 24
+#other_font_size = 11
+# Determine the font size according to the resolution
+total_number_of_pixels = screen_width * screen_height
+# Determine the scaling factor (according to a complex formula)
+scaling_factor_title_font = float((0.03611 * total_number_of_pixels) + 9803.1254)
+scaling_factor_other_font = float((0.07757 * total_number_of_pixels) + 23529.8386)
+title_font_size = int(round(total_number_of_pixels / scaling_factor_title_font))
+other_font_size = int(round(total_number_of_pixels / scaling_factor_other_font))
 # Windows
 if system_os == "Windows":
     # Define the fonts
-    garamond_24_bold = font.Font(family = "Garamond", size = 24, weight = "bold")
-    garamond_12_normal = font.Font(family = "Garamond", size = 12, weight = "normal")
-    arial_24_bold = font.Font(family = "Arial", size = 24, weight = "bold")
-    arial_12_normal = font.Font(family = "Arial", size = 12, weight = "normal")
-    trebuchet_24_bold = font.Font(family = "Trebuchet MS", size = 24, weight = "bold")
-    trebuchet_11_normal = font.Font(family = "Trebuchet MS", size = 11, weight = "normal")
-    trebuchet_11_bold = font.Font(family = "Trebuchet MS", size = 11, weight = "bold")
+    garamond_title_bold = font.Font(family = "Garamond", size = title_font_size, weight = "bold")
+    garamond_other_normal = font.Font(family = "Garamond", size = other_font_size, weight = "normal")
+    arial_title_bold = font.Font(family = "Arial", size = title_font_size, weight = "bold")
+    arial_other_normal = font.Font(family = "Arial", size = other_font_size, weight = "normal")
+    trebuchet_title_bold = font.Font(family = "Trebuchet MS", size = title_font_size, weight = "bold")
+    trebuchet_other_normal = font.Font(family = "Trebuchet MS", size = other_font_size, weight = "normal")
+    trebuchet_other_bold = font.Font(family = "Trebuchet MS", size = other_font_size, weight = "bold")
     # Use them in the GUI
-    title_font = trebuchet_24_bold
-    label_font = trebuchet_11_normal
-    entry_font = trebuchet_11_normal
-    button_font = trebuchet_11_bold
+    title_font = trebuchet_title_bold
+    label_font = trebuchet_other_normal
+    entry_font = trebuchet_other_normal
+    button_font = trebuchet_other_bold
 # Linux
 elif system_os == "Linux":
     # Retrieve the linux distribution
     linux_distro = platform.linux_distribution()
     # Ubuntu
-    if "Ubuntu" in linux_distro:
+    if "Ubuntu" in linux_distro or "Ubuntu" in os_version:
         # Define the fonts
-        ubuntu_24_bold = font.Font(family = "Ubuntu", size = 24, weight = "bold")
-        ubuntu_12_normal = font.Font(family = "Ubuntu", size = 12, weight = "normal")
-        ubuntu_12_bold = font.Font(family = "Ubuntu", size = 12, weight = "bold")
+        ubuntu_title_bold = font.Font(family = "Ubuntu", size = title_font_size, weight = "bold")
+        ubuntu_other_normal = font.Font(family = "Ubuntu", size = other_font_size, weight = "normal")
+        ubuntu_other_bold = font.Font(family = "Ubuntu", size = other_font_size, weight = "bold")
         # Use them in the GUI
-        title_font = ubuntu_24_bold
-        label_font = ubuntu_12_normal
-        entry_font = ubuntu_12_normal
-        button_font = ubuntu_12_bold
+        title_font = ubuntu_title_bold
+        label_font = ubuntu_other_normal
+        entry_font = ubuntu_other_normal
+        button_font = ubuntu_other_bold
     # Fedora
-    elif "Fedora" in linux_distro:
+    elif "Fedora" in linux_distro or "Fedora" in os_version:
         # Define the fonts
-        cantarell_24_bold = font.Font(family = "Cantarell", size = 24, weight = "bold")
-        cantarell_12_normal = font.Font(family = "Cantarell", size = 12, weight = "normal")
-        cantarell_12_bold = font.Font(family = "Cantarell", size = 12, weight = "bold")
+        cantarell_title_bold = font.Font(family = "Cantarell", size = title_font_size, weight = "bold")
+        cantarell_other_normal = font.Font(family = "Cantarell", size = other_font_size, weight = "normal")
+        cantarell_other_bold = font.Font(family = "Cantarell", size = other_font_size, weight = "bold")
         # Use them in the GUI
-        title_font = cantarell_24_bold
-        label_font = cantarell_12_normal
-        entry_font = cantarell_12_normal
-        button_font = cantarell_12_bold
+        title_font = cantarell_title_bold
+        label_font = cantarell_other_normal
+        entry_font = cantarell_other_normal
+        button_font = cantarell_other_bold
     # Other linux distros
     else:
         # Define the fonts
-        liberation_24_bold = font.Font(family = "Liberation Sans", size = 24, weight = "bold")
-        liberation_12_normal = font.Font(family = "Liberation Sans", size = 12, weight = "normal")
-        liberation_12_bold = font.Font(family = "Liberation Sans", size = 12, weight = "bold")
+        liberation_title_bold = font.Font(family = "Liberation Sans", size = title_font_size, weight = "bold")
+        liberation_other_normal = font.Font(family = "Liberation Sans", size = other_font_size, weight = "normal")
+        liberation_other_bold = font.Font(family = "Liberation Sans", size = other_font_size, weight = "bold")
         # Use them in the GUI
-        title_font = liberation_24_bold
-        label_font = liberation_12_normal
-        entry_font = liberation_12_normal
-        button_font = liberation_12_bold
+        title_font = liberation_title_bold
+        label_font = liberation_other_normal
+        entry_font = liberation_other_normal
+        button_font = liberation_other_bold
 elif system_os == "Mac":
     # Define the fonts
-    helvetica_24_bold = font.Font(family = "Helvetica", size = 24, weight = "bold")
-    helvetica_16_normal = font.Font(family = "Helvetica", size = 16, weight = "normal") 
-    helvetica_16_bold = font.Font(family = "Helvetica", size = 16, weight = "bold")
+    helvetica_title_bold = font.Font(family = "Helvetica", size = title_font_size, weight = "bold")
+    helvetica_other_normal = font.Font(family = "Helvetica", size = other_font_size, weight = "normal") 
+    helvetica_other_bold = font.Font(family = "Helvetica", size = other_font_size, weight = "bold")
     # Use them in the GUI
-    title_font = helvetica_24_bold
-    label_font = helvetica_16_normal
-    entry_font = helvetica_16_normal
-    button_font = helvetica_16_bold
+    title_font = helvetica_title_bold
+    label_font = helvetica_other_normal
+    entry_font = helvetica_other_normal
+    button_font = helvetica_other_bold
 else:
     # Define the fonts
-    courier_24_bold = font.Font(family = "Courier New", size = 24, weight = "bold")
-    courier_16_normal = font.Font(family = "Courier New", size = 16, weight = "normal") 
-    courier_16_bold = font.Font(family = "Courier New", size = 16, weight = "bold")
+    courier_title_bold = font.Font(family = "Courier New", size = title_font_size, weight = "bold")
+    courier_other_normal = font.Font(family = "Courier New", size = other_font_size, weight = "normal") 
+    courier_other_bold = font.Font(family = "Courier New", size = other_font_size, weight = "bold")
     # Use them in the GUI
-    title_font = courier_24_bold
-    label_font = courier_16_normal
-    entry_font = courier_16_normal
-    button_font = courier_16_bold
+    title_font = courier_title_bold
+    label_font = courier_other_normal
+    entry_font = courier_other_normal
+    button_font = courier_other_bold
 #font.families(root = window)
 
 
@@ -1806,7 +1832,7 @@ heat_bed_temperature_entry.grid(row=11, column=3)
 
 
 ########## Buttons (with positioning)
-Button(window, text='Quit', font = button_font, command=window.destroy).grid(row=17, column=0)
+Button(window, text='Quit', font = button_font, command=close_program_function).grid(row=17, column=0)
 # Dump the file
 Button(window, text='Dump gcode file', font = button_font, command=dump_gcode_file_function).grid(row=17, column=2)
 # Output folder
