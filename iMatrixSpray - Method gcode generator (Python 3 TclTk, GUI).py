@@ -26,7 +26,7 @@ from tkinter import messagebox, Label, Button, Entry, Tk, filedialog, font, Radi
 
 
 
-############################## Initialise the output_folder variable
+############################## Initialize the output_folder variable
 output_folder = os.getcwd()
 
 
@@ -85,6 +85,7 @@ def check_for_updates_function():
         for line in first_block:
             if line.startswith("program_version = "):
                 version_number = line.split("program_version = ")[1]
+                version_number = version_number.split("\"")[1]
         # Split the version number in YYYY.MM.DD
         version_YYYYMMDD = version_number.split(".")
         # Compare with the local version
@@ -104,10 +105,12 @@ def check_for_updates_function():
             if update_available is True:
                 # The version number could not be ckecked due to internet problems
                 Tk().withdraw()
-                messagebox.showinfo(title="Connection problem", message="UPDATES AVAILABLE!\n\nDownload the updated iMatrixSpray Gcode Generator at:\n\nhttps://raw.githubusercontent.com/gmanuel89/iMatrixSpray/master/iMatrixSpray%20-%20Method%20gcode%20generator%20(Python%203%20TclTk%2C%20GUI).py")
+                messagebox.showinfo(title="Updates available", message="UPDATES AVAILABLE!\n\nDownload the updated iMatrixSpray Gcode Generator at:\n\nhttps://raw.githubusercontent.com/gmanuel89/iMatrixSpray/master/iMatrixSpray%20-%20Method%20gcode%20generator%20(Python%203%20TclTk%2C%20GUI).py")
+                # Update the label                
+                check_for_updates_label = Label(window, text=("Version: " + program_version + "\nUpdated version: " + version_number), font=label_font).grid(row=2, column=3)
             else:
                 Tk().withdraw()
-                messagebox.showinfo(title="Connection problem", message="NO UPDATES AVAILABLE!\n\nThe latest version of the iMatrixSpray Gcode Generator is running!")
+                messagebox.showinfo(title="No updates available", message="NO UPDATES AVAILABLE!\n\nThe latest version of the iMatrixSpray Gcode Generator is running!")
     # Something went wrong: library not installed, retrieving failed, errors in parsing the version number 
     except:
         # Return messages
