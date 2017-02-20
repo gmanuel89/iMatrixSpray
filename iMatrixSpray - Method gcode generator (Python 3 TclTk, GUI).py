@@ -2,7 +2,8 @@
 
 #################### iMatrixSpray generator GUI ####################
 
-# VERSION 2017.02.17
+# Program version (Specified by the program writer!!!!)
+program_version = "2017.02.20"
 
 
 
@@ -17,7 +18,6 @@
 import tkinter, os, platform
 #from tkinter import *
 from tkinter import messagebox, Label, Button, Entry, Tk, filedialog, font, Radiobutton, StringVar
-
 
 
 
@@ -65,6 +65,66 @@ spray_syringe_volume_per_travel = 16.7
 
 
 ############################## FUNCTIONS
+
+########## FUNCTION: Check for updates
+def check_for_updates_function(): 
+    # Initialize the version
+    version_number = None
+    try:
+        # Import the library
+        import urllib.request
+        # Retrieve the file from GitHub
+        github_file = urllib.request.urlopen("https://raw.githubusercontent.com/gmanuel89/iMatrixSpray/master/iMatrixSpray%20-%20Method%20gcode%20generator%20(Python%203%20TclTk%2C%20GUI).py").read()
+        # String conversion
+        github_file_string = str(github_file)
+        # Lines
+        github_file_lines = github_file_string.split("\\\\n")
+        # Get the first line, with the version number
+        first_block = github_file_lines[0].split("\\n")
+        # Retrieve the version number
+        for line in first_block:
+            if line.startswith("program_version = "):
+                version_number = line.split("program_version = ")[1]
+        # Split the version number in YYYY.MM.DD
+        version_YYYYMMDD = version_number.split(".")
+        # Compare with the local version
+        local_version_YYYYMMDD = program_version.split(".")
+        # Initialize the variable that says if there are updates
+        update_available = False
+        for v in range(len(local_version_YYYYMMDD)):
+            if local_version_YYYYMMDD[v] < version_YYYYMMDD[v]:
+                update_available = True
+                break
+        # Return messages
+        if version_number is None:
+            # The version number could not be ckecked due to internet problems
+            Tk().withdraw()
+            messagebox.showwarning(title="Connection problem", message="The program version number could not be checked due to internet connection problems!\n\nManually check for updates at:\n\nhttps://raw.githubusercontent.com/gmanuel89/iMatrixSpray/master/iMatrixSpray%20-%20Method%20gcode%20generator%20(Python%203%20TclTk%2C%20GUI).py")
+        else:
+            if update_available is True:
+                # The version number could not be ckecked due to internet problems
+                Tk().withdraw()
+                messagebox.showinfo(title="Connection problem", message="UPDATES AVAILABLE!\n\nDownload the updated iMatrixSpray Gcode Generator at:\n\nhttps://raw.githubusercontent.com/gmanuel89/iMatrixSpray/master/iMatrixSpray%20-%20Method%20gcode%20generator%20(Python%203%20TclTk%2C%20GUI).py")
+            else:
+                Tk().withdraw()
+                messagebox.showinfo(title="Connection problem", message="NO UPDATES AVAILABLE!\n\nThe latest version of the iMatrixSpray Gcode Generator is running!")
+    # Something went wrong: library not installed, retrieving failed, errors in parsing the version number 
+    except:
+        # Return messages
+        if version_number is None:
+            # The version number could not be ckecked due to internet problems
+            Tk().withdraw()
+            messagebox.showwarning(title="Connection problem", message="The program version number could not be checked due to internet connection problems!\n\nManually check for updates at:\n\nhttps://raw.githubusercontent.com/gmanuel89/iMatrixSpray/master/iMatrixSpray%20-%20Method%20gcode%20generator%20(Python%203%20TclTk%2C%20GUI).py")
+
+
+
+
+
+
+
+
+
+
 
 ########## FUNCTION: Select where to save the GCODE method file
 def select_output_folder_function():
@@ -1746,6 +1806,7 @@ filename_label = Label(window, text="Set the name of the gcode method file\n(fil
 heat_bed_presence_label = Label(window, text="Heat bed presence\n(y or n, default: y)", font=label_font).grid(row=8, column=2)
 heat_bed_height_label = Label(window, text="Heat bed height\n(default 5mm)", font=label_font).grid(row=10, column=2)
 heat_bed_temperature_label = Label(window, text="Heat bed temperature\n(default 0°C, do not heat)", font=label_font).grid(row=11, column=2)
+check_for_updates_label = Label(window, text=("Version: " + program_version), font=label_font).grid(row=2, column=3)
 
 
 
@@ -1841,5 +1902,8 @@ Button(window, text="Browse output folder", font = button_font, command=select_o
 Button(window, text="Information", relief = "raised", bitmap="info", command=show_info).grid(row=1, column=2)
 # Guide
 Button(window, text="Guide", relief = "raised", bitmap="question", command=show_guide).grid(row=1, column=3)
+# Check for updates
+Button(window, text="Check for updates", relief = "raised", command=check_for_updates_function).grid(row=2, column=2)
+
 # Hold until quit
 window.mainloop()
