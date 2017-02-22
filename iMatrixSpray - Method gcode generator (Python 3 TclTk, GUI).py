@@ -112,7 +112,7 @@ def check_for_updates_function():
                 os.chdir(output_folder)
                 urllib.request.urlretrieve ("https://raw.githubusercontent.com/gmanuel89/iMatrixSpray/master/iMatrixSpray%20-%20Method%20gcode%20generator%20(Python%203%20TclTk%2C%20GUI).py", "iMatrixSpray gcode generator (Python 3 TclTk).py")
                 Tk().withdraw()
-                messagebox.showinfo(title="Updated file retrieved!", message=("The update file named\n'iMatrixSpray gcode generator (Python 3 TclTk).py'\nhas been retrieved and placed in\n" + output_folder)
+                messagebox.showinfo(title="Updated file retrieved!", message=("The update file named\n'iMatrixSpray gcode generator (Python 3 TclTk).py'\nhas been retrieved and placed in\n" + output_folder))
             else:
                 Tk().withdraw()
                 messagebox.showinfo(title="No updates available", message="NO UPDATES AVAILABLE!\n\nThe latest version of the iMatrixSpray Gcode Generator is running!")
