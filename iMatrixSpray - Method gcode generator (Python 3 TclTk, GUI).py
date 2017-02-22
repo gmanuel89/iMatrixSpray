@@ -69,7 +69,7 @@ spray_syringe_volume_per_travel = 16.7
 ########## FUNCTION: Check for updates
 def check_for_updates_function(): 
     # Initialize the version
-    version_number = None
+    online_version_number = None
     try:
         # Import the library
         import urllib.request
@@ -84,20 +84,20 @@ def check_for_updates_function():
         # Retrieve the version number
         for line in first_block:
             if line.startswith("program_version = "):
-                version_number = line.split("program_version = ")[1]
-                version_number = version_number.split("\"")[1]
+                online_version_number = line.split("program_version = ")[1]
+                online_version_number = online_version_number.split("\"")[1]
         # Split the version number in YYYY.MM.DD
-        version_YYYYMMDD = version_number.split(".")
+        online_version_YYYYMMDDVV = online_version_number.split(".")
         # Compare with the local version
-        local_version_YYYYMMDD = program_version.split(".")
+        local_version_YYYYMMDDVV = program_version.split(".")
         # Initialize the variable that says if there are updates
         update_available = False
-        for v in range(len(local_version_YYYYMMDD)):
-            if local_version_YYYYMMDD[v] < version_YYYYMMDD[v]:
+        for v in range(len(local_version_YYYYMMDDVV)):
+            if local_version_YYYYMMDDVV[v] < online_version_YYYYMMDDVV[v]:
                 update_available = True
                 break
         # Return messages
-        if version_number is None:
+        if online_version_number is None:
             # The version number could not be ckecked due to internet problems
             Tk().withdraw()
             messagebox.showwarning(title="Connection problem", message="The program version number could not be checked due to internet connection problems!\n\nManually check for updates at:\n\nhttps://raw.githubusercontent.com/gmanuel89/iMatrixSpray/master/iMatrixSpray%20-%20Method%20gcode%20generator%20(Python%203%20TclTk%2C%20GUI).py")
@@ -107,14 +107,19 @@ def check_for_updates_function():
                 Tk().withdraw()
                 messagebox.showinfo(title="Updates available", message="UPDATES AVAILABLE!\n\nDownload the updated iMatrixSpray Gcode Generator at:\n\nhttps://raw.githubusercontent.com/gmanuel89/iMatrixSpray/master/iMatrixSpray%20-%20Method%20gcode%20generator%20(Python%203%20TclTk%2C%20GUI).py")
                 # Update the label                
-                check_for_updates_label = Label(window, text=("Version: " + program_version + "\nUpdated version: " + version_number), font=label_font).grid(row=2, column=3)
+                check_for_updates_label = Label(window, text=("Version: " + program_version + "\nUpdated version: " + online_version_number), font=label_font).grid(row=2, column=3)
+                # Automatically download the new file in the working directory
+                os.chdir(output_folder)
+                urllib.request.urlretrieve ("https://raw.githubusercontent.com/gmanuel89/iMatrixSpray/master/iMatrixSpray%20-%20Method%20gcode%20generator%20(Python%203%20TclTk%2C%20GUI).py", "iMatrixSpray gcode generator (Python 3 TclTk).py")
+                Tk().withdraw()
+                messagebox.showinfo(title="Updated file retrieved!", message=("The update file named\n'iMatrixSpray gcode generator (Python 3 TclTk).py'\nhas been retrieved and placed in\n" + output_folder)
             else:
                 Tk().withdraw()
                 messagebox.showinfo(title="No updates available", message="NO UPDATES AVAILABLE!\n\nThe latest version of the iMatrixSpray Gcode Generator is running!")
     # Something went wrong: library not installed, retrieving failed, errors in parsing the version number 
     except:
         # Return messages
-        if version_number is None:
+        if online_version_number is None:
             # The version number could not be ckecked due to internet problems
             Tk().withdraw()
             messagebox.showwarning(title="Connection problem", message="The program version number could not be checked due to internet connection problems!\n\nManually check for updates at:\n\nhttps://raw.githubusercontent.com/gmanuel89/iMatrixSpray/master/iMatrixSpray%20-%20Method%20gcode%20generator%20(Python%203%20TclTk%2C%20GUI).py")
