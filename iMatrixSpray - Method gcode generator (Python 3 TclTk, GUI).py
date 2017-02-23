@@ -1,6 +1,6 @@
 #! python3
 
-#################### iMatrixSpray generator GUI ####################
+#################### iMatrixSpray method gcode generator GUI ####################
 
 # Program version (Specified by the program writer!!!!)
 program_version = "2017.02.23.2"
