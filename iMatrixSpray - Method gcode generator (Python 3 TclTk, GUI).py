@@ -3,8 +3,11 @@
 #################### iMatrixSpray generator GUI ####################
 
 # Program version (Specified by the program writer!!!!)
-program_version = "2017.02.23.01"
-
+program_version = "2017.02.23.1"
+### GitHub URL where the R file is
+github_iMatrix_url = "https://raw.githubusercontent.com/gmanuel89/iMatrixSpray/master/iMatrixSpray%20-%20Method%20gcode%20generator%20(Python%203%20TclTk%2C%20GUI).py"
+### Name of the file when downloaded
+script_file_name = "iMatrixSpray gcode method generator.py"
 
 
 
@@ -66,15 +69,20 @@ spray_syringe_volume_per_travel = 16.7
 
 ############################## FUNCTIONS
 
-########## FUNCTION: Check for updates
-def check_for_updates_function(): 
+########## FUNCTION: Check for updates (from my GitHub page) (it just updates the label telling the user if there are updates) (it updates the check for updates value that is called by the label)
+def check_for_updates_function():
+    # Initialize the variable that displays the version number and the possible updates
+    global check_for_updates_value, update_available
+    check_for_updates_value = program_version
     # Initialize the version
     online_version_number = None
+    # Initialize the variable that says if there are updates
+    update_available = False
     try:
         # Import the library
         import urllib.request
         # Retrieve the file from GitHub
-        github_file = urllib.request.urlopen("https://raw.githubusercontent.com/gmanuel89/iMatrixSpray/master/iMatrixSpray%20-%20Method%20gcode%20generator%20(Python%203%20TclTk%2C%20GUI).py").read()
+        github_file = urllib.request.urlopen(github_iMatrix_url).read()
         # String conversion
         github_file_string = str(github_file)
         # Lines
@@ -90,8 +98,6 @@ def check_for_updates_function():
         online_version_YYYYMMDDVV = online_version_number.split(".")
         # Compare with the local version
         local_version_YYYYMMDDVV = program_version.split(".")
-        # Initialize the variable that says if there are updates
-        update_available = False
         for v in range(len(local_version_YYYYMMDDVV)):
             if local_version_YYYYMMDDVV[v] < online_version_YYYYMMDDVV[v]:
                 update_available = True
@@ -99,30 +105,63 @@ def check_for_updates_function():
         # Return messages
         if online_version_number is None:
             # The version number could not be ckecked due to internet problems
-            Tk().withdraw()
-            messagebox.showwarning(title="Connection problem", message="The program version number could not be checked due to internet connection problems!\n\nManually check for updates at:\n\nhttps://raw.githubusercontent.com/gmanuel89/iMatrixSpray/master/iMatrixSpray%20-%20Method%20gcode%20generator%20(Python%203%20TclTk%2C%20GUI).py")
+            check_for_updates_value = "Version: %s\nUpdates not checked: connection problems" %(program_version)
         else:
             if update_available is True:
                 # The version number could not be ckecked due to internet problems
-                Tk().withdraw()
-                messagebox.showinfo(title="Updates available", message="UPDATES AVAILABLE!\n\nDownload the updated iMatrixSpray Gcode Generator at:\n\nhttps://raw.githubusercontent.com/gmanuel89/iMatrixSpray/master/iMatrixSpray%20-%20Method%20gcode%20generator%20(Python%203%20TclTk%2C%20GUI).py")
-                # Update the label                
-                check_for_updates_label = Label(window, text=("Version: " + program_version + "\nUpdated version: " + online_version_number), font=label_font).grid(row=2, column=3)
-                # Automatically download the new file in the working directory
-                os.chdir(output_folder)
-                urllib.request.urlretrieve ("https://raw.githubusercontent.com/gmanuel89/iMatrixSpray/master/iMatrixSpray%20-%20Method%20gcode%20generator%20(Python%203%20TclTk%2C%20GUI).py", "iMatrixSpray gcode generator (Python 3 TclTk).py")
-                Tk().withdraw()
-                messagebox.showinfo(title="Updated file retrieved!", message=("The update file named\n'iMatrixSpray gcode generator (Python 3 TclTk).py'\nhas been retrieved and placed in\n" + output_folder))
+                check_for_updates_value = "Version: %s\nUpdates available: %s" %(program_version, online_version_number)
             else:
-                Tk().withdraw()
-                messagebox.showinfo(title="No updates available", message="NO UPDATES AVAILABLE!\n\nThe latest version of the iMatrixSpray Gcode Generator is running!")
+                check_for_updates_value = "Version: %s\nNo updates available" %(program_version)
     # Something went wrong: library not installed, retrieving failed, errors in parsing the version number 
     except:
         # Return messages
         if online_version_number is None:
             # The version number could not be ckecked due to internet problems
+            check_for_updates_value = "Version: %s\nUpdates not checked: connection problems" %(program_version)
+
+
+
+
+
+
+
+
+
+########## FUNCTION: Download updates (from my GitHub page)
+def download_updates_function():
+    # Initialize the variable that displays the version number
+    global check_for_updates_value
+    # Download updates only if there are updates available
+    if update_available is True:
+        # Initialize the variable which says if the file has been downloaded successfully
+        file_downloaded = False
+        # Choose where to save the updated script
+        Tk().withdraw()
+        messagebox.showinfo(title="Download folder", message="Select where to save the updated script file")
+        download_folder = filedialog.askdirectory ()
+        # Fix the possible non-defined output folder
+        if download_folder == "":
+            download_folder = os.getcwd()
+        # Just to confirm...
+        Tk().withdraw()
+        messagebox.showinfo(title="Folder selected", message="The updated iMatrix Gcode Method Generator file will be downloaded in:\n\n'%s'" %(download_folder))
+        try:
+            # Import the library
+            import urllib.request
+            # Download the new file in the working directory
+            os.chdir(download_folder)
+            urllib.request.urlretrieve (github_iMatrix_url, script_file_name)
+            file_downloaded = True
+        except:
+            pass
+        if file_downloaded is True:
             Tk().withdraw()
-            messagebox.showwarning(title="Connection problem", message="The program version number could not be checked due to internet connection problems!\n\nManually check for updates at:\n\nhttps://raw.githubusercontent.com/gmanuel89/iMatrixSpray/master/iMatrixSpray%20-%20Method%20gcode%20generator%20(Python%203%20TclTk%2C%20GUI).py")
+            messagebox.showinfo(title="Updated file retrieved!", message="The update file named\n%s\nhas been retrieved and placed in\n%s" %(script_file_name, download_folder))
+        else:
+            Tk().withdraw()
+            messagebox.showinfo(title="Connection problem", message="The updated script file could not be downloaded due to internet connection problems!\n\nManually download the updated script file at:\n\n%s" %(github_iMatrix_url))
+    else:
+        check_for_updates_value = "Version: %s\nNo updates available" %(program_version)
 
 
 
@@ -1689,10 +1728,12 @@ def close_program_function():
 
 
 ############################## TCL-TK WINDOW
+##### Check for updates
+check_for_updates_function()
 
 ########## Main window
 window = Tk()
-window.title("iMatrixSpray Method Generator (gcode)")
+window.title("iMatrixSpray Gcode Method Generator")
 window.resizable(False,False)
 #window.wm_minsize(width=550, height=600)
 
@@ -1749,14 +1790,17 @@ elif system_os == "Linux":
     # Fedora
     elif "Fedora" in linux_distro or "Fedora" in os_version:
         # Define the fonts
+        liberation_title_bold = font.Font(family = "Liberation Sans", size = title_font_size, weight = "bold")
+        liberation_other_normal = font.Font(family = "Liberation Sans", size = other_font_size, weight = "normal")
+        liberation_other_bold = font.Font(family = "Liberation Sans", size = other_font_size, weight = "bold")
         cantarell_title_bold = font.Font(family = "Cantarell", size = title_font_size, weight = "bold")
         cantarell_other_normal = font.Font(family = "Cantarell", size = other_font_size, weight = "normal")
         cantarell_other_bold = font.Font(family = "Cantarell", size = other_font_size, weight = "bold")
         # Use them in the GUI
-        title_font = cantarell_title_bold
-        label_font = cantarell_other_normal
-        entry_font = cantarell_other_normal
-        button_font = cantarell_other_bold
+        title_font = liberation_title_bold
+        label_font = liberation_other_normal
+        entry_font = liberation_other_normal
+        button_font = liberation_other_bold
     # Other linux distros
     else:
         # Define the fonts
@@ -1814,7 +1858,7 @@ filename_label = Label(window, text="Set the name of the gcode method file\n(fil
 heat_bed_presence_label = Label(window, text="Heat bed presence\n(y or n, default: y)", font=label_font).grid(row=8, column=2)
 heat_bed_height_label = Label(window, text="Heat bed height\n(default 5mm)", font=label_font).grid(row=10, column=2)
 heat_bed_temperature_label = Label(window, text="Heat bed temperature\n(default 0°C, do not heat)", font=label_font).grid(row=11, column=2)
-check_for_updates_label = Label(window, text=("Version: " + program_version), font=label_font).grid(row=2, column=3)
+check_for_updates_label = Label(window, text=check_for_updates_value, font=label_font).grid(row=2, column=3)
 
 
 
@@ -1911,7 +1955,7 @@ Button(window, text="Information", relief = "raised", bitmap="info", command=sho
 # Guide
 Button(window, text="Guide", relief = "raised", bitmap="question", command=show_guide).grid(row=1, column=3)
 # Check for updates
-Button(window, text="Check for updates", relief = "raised", command=check_for_updates_function).grid(row=2, column=2)
+Button(window, text="Download updates", relief = "raised", command=download_updates_function).grid(row=2, column=2)
 
 # Hold until quit
 window.mainloop()
