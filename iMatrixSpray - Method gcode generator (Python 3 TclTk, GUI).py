@@ -3,7 +3,7 @@
 #################### iMatrixSpray generator GUI ####################
 
 # Program version (Specified by the program writer!!!!)
-program_version = "2017.02.23.1"
+program_version = "2017.02.23.2"
 ### GitHub URL where the R file is
 github_iMatrix_url = "https://raw.githubusercontent.com/gmanuel89/iMatrixSpray/master/iMatrixSpray%20-%20Method%20gcode%20generator%20(Python%203%20TclTk%2C%20GUI).py"
 ### Name of the file when downloaded
@@ -31,6 +31,7 @@ from tkinter import messagebox, Label, Button, Entry, Tk, filedialog, font, Radi
 
 ############################## Initialize the output_folder variable
 output_folder = os.getcwd()
+gcode_file_dumped = False
 
 
 
@@ -43,7 +44,7 @@ output_folder = os.getcwd()
 
 ############################## CONSTANT VALUES
 max_speed_of_movement = 200
-max_matrix_density = 5
+max_matrix_density = 10
 max_height_of_the_needle = 80
 min_height_of_the_needle = 1
 coordinates_of_washing_x_axis = 0
@@ -198,7 +199,10 @@ def select_output_folder_function():
 
 ########## FUNCTION: Dump the GCODE method file
 def dump_gcode_file_function():
-            
+    # Escape the function
+    global solution_to_use_letter, waiting_phase_between_solutions_time, coordinates_of_spray_x_axis, coordinates_of_spray_y_axis, heat_bed_presence, heat_bed_height, interspray_wash_choice, heat_bed_temperature, height_of_the_needle, distance_between_lines, speed_of_movement, matrix_density, number_of_initial_wash_cycles, number_of_spray_cycles, additional_waiting_time_after_each_spray_cycle, number_of_valve_rinsing_cycles, drying_time, horizontal_spraying, gcode_file_dumped
+    
+    
     
     
     
@@ -291,8 +295,14 @@ def dump_gcode_file_function():
     coordinates_of_spray_x_axis_input = coordinates_of_spray_x_axis_entry.get()
     coordinates_of_spray_y_axis_input = coordinates_of_spray_y_axis_entry.get()
     # Split (it never fails, it generates a list)
-    coordinates_of_spray_x_axis_splitted = coordinates_of_spray_x_axis_input.split(" ")
-    coordinates_of_spray_y_axis_splitted = coordinates_of_spray_y_axis_input.split(" ")
+    coordinates_of_spray_x_axis_splitted = coordinates_of_spray_x_axis_input.split(",")
+    coordinates_of_spray_y_axis_splitted = coordinates_of_spray_y_axis_input.split(",")
+    # Strip off the spaces (it always returns a list)
+    for i in range(len(coordinates_of_spray_x_axis_splitted)):
+        coordinates_of_spray_x_axis_splitted[i] = coordinates_of_spray_x_axis_splitted[i].strip()
+        # Strip off the spaces (it always returns a list)
+    for i in range(len(coordinates_of_spray_y_axis_splitted)):
+        coordinates_of_spray_y_axis_splitted[i] = coordinates_of_spray_y_axis_splitted[i].strip()
     ### X-axis
     coordinates_of_spray_x_axis = []
     for i in range(len(coordinates_of_spray_x_axis_splitted)):
@@ -300,7 +310,7 @@ def dump_gcode_file_function():
         # If specified
         if coordinates_of_spray_x_axis_splitted[i] != "":
             # Convert it into a list
-            coordinates_of_spray_x_axis_splitted[i] = coordinates_of_spray_x_axis_splitted[i].split(",")
+            coordinates_of_spray_x_axis_splitted[i] = coordinates_of_spray_x_axis_splitted[i].split(":")
             # From strings to floating point numbers (tuple)
             try:
                 coordinates_of_spray_x_axis_splitted[i] = (float(coordinates_of_spray_x_axis_splitted[i][0]), float(coordinates_of_spray_x_axis_splitted[i][1]))
@@ -335,7 +345,7 @@ def dump_gcode_file_function():
         # If specified
         if coordinates_of_spray_y_axis_splitted[i] != "":
             # Convert it into a list
-            coordinates_of_spray_y_axis_splitted[i] = coordinates_of_spray_y_axis_splitted[i].split(",")
+            coordinates_of_spray_y_axis_splitted[i] = coordinates_of_spray_y_axis_splitted[i].split(":")
             # From strings to floating point numbers (tuple)
             try:
                 coordinates_of_spray_y_axis_splitted[i] = (float(coordinates_of_spray_y_axis_splitted[i][0]), float(coordinates_of_spray_y_axis_splitted[i][1]))
@@ -1645,8 +1655,262 @@ def dump_gcode_file_function():
     # Gcode file generated!
     tkinter.Tk().withdraw()
     tkinter.messagebox.showinfo(title="gcode file generated", message="The gcode file\n\n'%s'\n\nhas been successfully generated and dumped in the folder\n\n'%s'" %(output_file, output_folder))
+    # Gcode dumped
+    gcode_file_dumped = True
 
 
+
+
+
+
+
+
+
+
+########## FUNCTION: Dump the GCODE method file
+def dump_method_parameters_file_function():
+    ##### Dump the methods only if the gcode file has been dumped (so it "records" the values)
+    if gcode_file_dumped is True:
+        
+        ### Solution to use
+        # Initialize the CSV line
+        solution_to_use_letter_line = ['Solution(s)']
+        # Append the values (separated by commas)
+        for x in solution_to_use_letter:
+            solution_to_use_letter_line.append(',' + str(x))
+        # Append the \n to finish the line
+        solution_to_use_letter_line.append('\n')
+        # Generate the final CSV line
+        solution_to_use_letter_line_csv = ''.join(solution_to_use_letter_line)
+        
+        ### Waiting phase between solutions
+        # Initialize the CSV line
+        waiting_phase_between_solutions_time_line = ['Waiting phase between solutions']
+        # Append the values (separated by commas)
+        if waiting_phase_between_solutions_time is None:
+            waiting_phase_between_solutions_time_line.append(',' + ' ')
+        else:
+            for x in waiting_phase_between_solutions_time:
+                waiting_phase_between_solutions_time_line.append(',' + str(x))
+        # Append the \n to finish the line
+        waiting_phase_between_solutions_time_line.append('\n')
+        # Generate the final CSV line
+        waiting_phase_between_solutions_time_line_csv = ''.join(waiting_phase_between_solutions_time_line)
+        
+        ### Spray coordinates x-axis
+        # Initialize the CSV line
+        coordinates_of_spray_x_axis_line = ['Coordinates of spray (X-axis)']
+        # Append the values (separated by commas)
+        for x in coordinates_of_spray_x_axis:
+            # Generate a subline
+            coordinates_of_spray_x_axis_subline = str(str(x[0]) + ' : ' + str(x[1]))
+            # Append the converted character subline to the final line
+            coordinates_of_spray_x_axis_line.append(',' + coordinates_of_spray_x_axis_subline)
+        # Append the \n to finish the line
+        coordinates_of_spray_x_axis_line.append('\n')
+        # Generate the final CSV line
+        coordinates_of_spray_x_axis_line_csv = ''.join(coordinates_of_spray_x_axis_line)
+        
+        ### Spray coordinates y-axis
+        # Initialize the CSV line
+        coordinates_of_spray_y_axis_line = ['Coordinates of spray (Y-axis)']
+        # Append the values (separated by commas)
+        for x in coordinates_of_spray_y_axis:
+            # Generate a subline
+            coordinates_of_spray_y_axis_subline = str(str(x[0]) + ' : ' + str(x[1]))
+            # Append the converted character subline to the final line
+            coordinates_of_spray_y_axis_line.append(',' + coordinates_of_spray_y_axis_subline)
+        # Append the \n to finish the line
+        coordinates_of_spray_y_axis_line.append('\n')
+        # Generate the final CSV line
+        coordinates_of_spray_y_axis_line_csv = ''.join(coordinates_of_spray_y_axis_line)
+        
+        ### Heat bed presence
+        # Initialize the CSV line
+        heat_bed_presence_line = ['Heat bed presence']
+        # Append the values (separated by commas)
+        for x in heat_bed_presence:
+            heat_bed_presence_line.append(',' + str(x))
+        # Append the \n to finish the line
+        heat_bed_presence_line.append('\n')
+        # Generate the final CSV line
+        heat_bed_presence_line_csv = ''.join(heat_bed_presence_line)
+        
+        ### Heat bed temperature
+        # Initialize the CSV line
+        heat_bed_temperature_line = ['Heat bed temperature']
+        # Append the values (separated by commas)
+        for x in heat_bed_temperature:
+            heat_bed_temperature_line.append(',' + str(x))
+        # Append the \n to finish the line
+        heat_bed_temperature_line.append('\n')
+        # Generate the final CSV line
+        cheat_bed_temperature_line_csv = ''.join(heat_bed_temperature_line)
+        
+        ### Heat bed height
+        # Initialize the CSV line
+        heat_bed_height_line = ['Heat bed height']
+        # Append the values (separated by commas)
+        heat_bed_height_line.append(',' + str(x))
+        # Append the \n to finish the line
+        heat_bed_height_line.append('\n')
+        # Generate the final CSV line
+        heat_bed_height_line_csv = ''.join(heat_bed_height_line)
+        
+        ### Interspray wash
+        # Initialize the CSV line
+        interspray_wash_choice_line = ['Interspray wash']
+        # Append the values (separated by commas)
+        for x in interspray_wash_choice:
+            interspray_wash_choice_line.append(',' + str(x))
+        # Append the \n to finish the line
+        interspray_wash_choice_line.append('\n')
+        # Generate the final CSV line
+        interspray_wash_choice_line_csv = ''.join(interspray_wash_choice_line)
+        
+        ### Height of the needle
+        # Initialize the CSV line
+        height_of_the_needle_line = ['Height of the needle']
+        # Append the values (separated by commas)
+        for x in height_of_the_needle:
+            height_of_the_needle_line.append(',' + str(x))
+        # Append the \n to finish the line
+        height_of_the_needle_line.append('\n')
+        # Generate the final CSV line
+        height_of_the_needle_line_csv = ''.join(height_of_the_needle_line)
+        
+        ### Distance between spray lines
+        # Initialize the CSV line
+        distance_between_lines_line = ['Distance between spray lines']
+        # Append the values (separated by commas)
+        for x in distance_between_lines:
+            distance_between_lines_line.append(',' + str(x))
+        # Append the \n to finish the line
+        distance_between_lines_line.append('\n')
+        # Generate the final CSV line
+        distance_between_lines_line_csv = ''.join(distance_between_lines_line)
+        
+        ### Speed of movement
+        # Initialize the CSV line
+        speed_of_movement_line = ['Speed of movement']
+        # Append the values (separated by commas)
+        for x in speed_of_movement:
+            speed_of_movement_line.append(',' + str(x))
+        # Append the \n to finish the line
+        speed_of_movement_line.append('\n')
+        # Generate the final CSV line
+        speed_of_movement_line_csv = ''.join(speed_of_movement_line)
+        
+        ### Matrix density
+        # Initialize the CSV line
+        matrix_density_line = ['Matrix density']
+        # Append the values (separated by commas)
+        for x in matrix_density:
+            matrix_density_line.append(',' + str(x))
+        # Append the \n to finish the line
+        matrix_density_line.append('\n')
+        # Generate the final CSV line
+        matrix_density_line_csv = ''.join(matrix_density_line)
+        
+        ### Number of initial wash cycles
+        # Initialize the CSV line
+        number_of_initial_wash_cycles_line = ['Number of initial wash cycles']
+        # Append the values (separated by commas)
+        for x in number_of_initial_wash_cycles:
+            number_of_initial_wash_cycles_line.append(',' + str(x))
+        # Append the \n to finish the line
+        number_of_initial_wash_cycles_line.append('\n')
+        # Generate the final CSV line
+        number_of_initial_wash_cycles_line_csv = ''.join(number_of_initial_wash_cycles_line)
+        
+        ### Number of spray cycles
+        # Initialize the CSV line
+        number_of_spray_cycles_line = ['Number of spray cycles']
+        # Append the values (separated by commas)
+        for x in number_of_spray_cycles:
+            number_of_spray_cycles_line.append(',' + str(x))
+        # Append the \n to finish the line
+        number_of_spray_cycles_line.append('\n')
+        # Generate the final CSV line
+        number_of_spray_cycles_line_csv = ''.join(number_of_spray_cycles_line)
+        
+        ### Additional waiting time after each spray cycle
+        # Initialize the CSV line
+        additional_waiting_time_after_each_spray_cycle_line = ['Additional waiting time after each spray cycle']
+        # Append the values (separated by commas)
+        for x in additional_waiting_time_after_each_spray_cycle:
+            additional_waiting_time_after_each_spray_cycle_line.append(',' + str(x))
+        # Append the \n to finish the line
+        additional_waiting_time_after_each_spray_cycle_line.append('\n')
+        # Generate the final CSV line
+        additional_waiting_time_after_each_spray_cycle_line_csv = ''.join(additional_waiting_time_after_each_spray_cycle_line)
+        
+        ### Number of valve rinsing cycles
+        # Initialize the CSV line
+        number_of_valve_rinsing_cycles_line = ['Number of valve rinsing cycles']
+        # Append the values (separated by commas)
+        for x in number_of_valve_rinsing_cycles:
+            number_of_valve_rinsing_cycles_line.append(',' + str(x))
+        # Append the \n to finish the line
+        number_of_valve_rinsing_cycles_line.append('\n')
+        # Generate the final CSV line
+        number_of_valve_rinsing_cycles_line_csv = ''.join(number_of_valve_rinsing_cycles_line)
+        
+        ### Drying time
+        # Initialize the CSV line
+        drying_time_line = ['Drying time']
+        # Append the values (separated by commas)
+        drying_time_line.append(',' + str(x))
+        # Append the \n to finish the line
+        drying_time_line.append('\n')
+        # Generate the final CSV line
+        drying_time_line_csv = ''.join(drying_time_line)
+        
+        ### Horizontal spraying
+        # Initialize the CSV line
+        horizontal_spraying_line = ['Horizontal spraying']
+        # Append the values (separated by commas)
+        for x in horizontal_spraying:
+            horizontal_spraying_line.append(',' + str(x))
+        # Append the \n to finish the line
+        horizontal_spraying_line.append('\n')
+        # Generate the final CSV line
+        horizontal_spraying_line_csv = ''.join(horizontal_spraying_line)
+        
+        # Move to the working directory (set)
+        os.chdir(output_folder)
+        # Get the filename from the GUI entry
+        output_file = filename_entry.get()
+        # Add the extension to the file automatically
+        if ".csv" not in output_file:
+            output_file = str(output_file) + " - Method parameters.csv"
+        # Open the file and write the lines
+        with open(output_file, "w") as f:
+            f.writelines(solution_to_use_letter_line_csv)
+            f.writelines(waiting_phase_between_solutions_time_line_csv)
+            f.writelines(coordinates_of_spray_x_axis_line_csv)
+            f.writelines(coordinates_of_spray_y_axis_line_csv)
+            f.writelines(heat_bed_presence_line_csv)
+            f.writelines(cheat_bed_temperature_line_csv)
+            f.writelines(heat_bed_height_line_csv)
+            f.writelines(interspray_wash_choice_line_csv)
+            f.writelines(height_of_the_needle_line_csv)
+            f.writelines(distance_between_lines_line_csv)
+            f.writelines(speed_of_movement_line_csv)
+            f.writelines(matrix_density_line_csv)
+            f.writelines(number_of_initial_wash_cycles_line_csv)
+            f.writelines(number_of_spray_cycles_line_csv)
+            f.writelines(additional_waiting_time_after_each_spray_cycle_line_csv)
+            f.writelines(number_of_valve_rinsing_cycles_line_csv)
+            f.writelines(drying_time_line_csv)
+            f.writelines(horizontal_spraying_line_csv)
+        #### Gcode file not dumped!
+        tkinter.Tk().withdraw()
+        tkinter.messagebox.showinfo(title="Method parameters file generated", message="The file\n\n'%s'\n\ncontaining the parameters for the gcode method has been successfully generated and dumped in the folder\n\n'%s'" %(output_file, output_folder))
+    else:
+        ##### Gcode file not dumped!
+        tkinter.Tk().withdraw()
+        tkinter.messagebox.showinfo(title="Dump gcode file first!", message="The gcode file must be generated and dumped\nbefore exporting the method parameter list")
 
 
 
@@ -1841,12 +2105,12 @@ title_label = Label(window, text="iMatrixSpray method generator", font=title_fon
 solution_to_use_label = Label(window, text="Solution(s) to spray with\n(A,B,C or rinse) (default: A)\n", font=label_font).grid(row=1, column=0)
 new_names_label = Label(window, text="Rename the solution(s) to spray with\n(separate the labels with commas)", font=label_font).grid(row=2,column=0)
 waiting_phase_between_solutions_time_label = Label(window, text="Set how much the device has to wait\nbefore switching between two consecutive solutions\n(separate the times with commas) (default: 5s)", font=label_font).grid(row=3, column=0)
-coordinates_of_spray_x_axis_label = Label(window, text="Set the x-axis coordinates of spraying (default: -60,60),\nin this format:x1,x2 x1,x2\n[hint: Coordinates for the small area are (-30,30)]", font=label_font).grid(row=4, column=0)
-coordinates_of_spray_y_axis_label = Label(window, text="Set the y-axis coordinates of spraying (default: -80,80),\nin this format:y1,y2 y1,y2\n[hint: Coordinates for the small area are (40,60)]", font=label_font).grid(row=5, column=0)
+coordinates_of_spray_x_axis_label = Label(window, text="Set the x-axis coordinates of spraying (default: -60:60),\nin this format: x1:x2, x1:x2\n[hint: Coordinates for the small area are (-30:30)]", font=label_font).grid(row=4, column=0)
+coordinates_of_spray_y_axis_label = Label(window, text="Set the y-axis coordinates of spraying (default: -80:80),\nin this format: y1:y2, y1:y2\n[hint: Coordinates for the small area are (40:60)]", font=label_font).grid(row=5, column=0)
 height_of_the_needle_label = Label(window, text="Set the height of the needle (in millimeters)\n(default: 60mm)", font=label_font).grid(row=6, column=0)
 distance_between_spray_lines_label = Label(window, text="Set the distance between lines when spraying\n(default: 5mm)", font=label_font).grid(row=7, column=0)
 speed_of_movement_label = Label(window, text="Set the speed of movement\n(max: 200, default: 150)", font=label_font).grid(row=8, column=0)
-matrix_density_label = Label(window, text="Set the density of the matrix on-tissue\n(in microlitres per squared centimeter) (max: 5, default: 1)", font=label_font).grid(row=9, column=0)
+matrix_density_label = Label(window, text="Set the density of the matrix on-tissue\n(in microlitres per squared centimeter) (max: 10, default: 1)", font=label_font).grid(row=9, column=0)
 number_of_initial_wash_cycles_label = Label(window, text="Set the number of initial wash cycles\n(default: 5)", font=label_font).grid(row=10, column=0)
 number_of_spray_cycles_label = Label(window, text="Set the number of spraying cycles\n(default:2)", font=label_font).grid(row=11, column=0)
 interspray_wash_choice_label = Label(window, text="Should the device perform the interspray rinse?\n(default: y)", font=label_font).grid(row=12, column=2)
@@ -1899,8 +2163,8 @@ heat_bed_temperature_entry = Entry(window, font=entry_font, justify="center")
 ########## Entry boxes / Radiobuttons (default values)
 solution_to_use_entry.insert(0, "A")
 waiting_phase_between_solutions_time_entry.insert(0,"5")
-coordinates_of_spray_x_axis_entry.insert(0,"-30,30")
-coordinates_of_spray_y_axis_entry.insert(0,"40,80")
+coordinates_of_spray_x_axis_entry.insert(0,"-30:30")
+coordinates_of_spray_y_axis_entry.insert(0,"40:80")
 height_of_the_needle_entry.insert(0,"60")
 distance_between_lines_entry.insert(0,"5")
 speed_of_movement_entry.insert(0,"150")
@@ -1948,13 +2212,15 @@ heat_bed_temperature_entry.grid(row=11, column=3)
 Button(window, text='Quit', font = button_font, command=close_program_function).grid(row=17, column=0)
 # Dump the file
 Button(window, text='Dump gcode file', font = button_font, command=dump_gcode_file_function).grid(row=17, column=2)
+# Dump the method parameters file
+Button(window, text='Dump method parameters file', font = button_font, command=dump_method_parameters_file_function).grid(row=17, column=3)
 # Output folder
 Button(window, text="Browse output folder", font = button_font, command=select_output_folder_function).grid(row=17, column=1)
 # Info
 Button(window, text="Information", relief = "raised", bitmap="info", command=show_info).grid(row=1, column=2)
 # Guide
 Button(window, text="Guide", relief = "raised", bitmap="question", command=show_guide).grid(row=1, column=3)
-# Check for updates
+# Download updates
 Button(window, text="Download updates", relief = "raised", command=download_updates_function).grid(row=2, column=2)
 
 # Hold until quit
