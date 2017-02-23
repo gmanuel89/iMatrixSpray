@@ -3,7 +3,7 @@
 #################### iMatrixSpray generator GUI ####################
 
 # Program version (Specified by the program writer!!!!)
-program_version = "2017.02.22.01"
+program_version = "2017.02.23.01"
 
 
 
