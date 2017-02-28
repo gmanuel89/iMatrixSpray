@@ -113,7 +113,7 @@ def check_for_updates_function():
                 check_for_updates_value = "Version: %s\nUpdates available: %s" %(program_version, online_version_number)
             else:
                 check_for_updates_value = "Version: %s\nNo updates available" %(program_version)
-    # Something went wrong: library not installed, retrieving failed, errors in parsing the version number 
+    # Something went wrong: library not installed, retrieving failed, errors in parsing the version number
     except:
         # Return messages
         if online_version_number is None:
@@ -163,6 +163,8 @@ def download_updates_function():
             messagebox.showinfo(title="Connection problem", message="The updated script file could not be downloaded due to internet connection problems!\n\nManually download the updated script file at:\n\n%s" %(github_iMatrix_url))
     else:
         check_for_updates_value = "Version: %s\nNo updates available" %(program_version)
+        Tk().withdraw()
+        messagebox.showinfo(title="No updates available", message="No updates available!")
 
 
 
@@ -201,14 +203,14 @@ def select_output_folder_function():
 def dump_gcode_file_function():
     # Escape the function
     global solution_to_use_letter, waiting_phase_between_solutions_time, coordinates_of_spray_x_axis, coordinates_of_spray_y_axis, heat_bed_presence, heat_bed_height, interspray_wash_choice, heat_bed_temperature, height_of_the_needle, distance_between_lines, speed_of_movement, matrix_density, number_of_initial_wash_cycles, number_of_spray_cycles, additional_waiting_time_after_each_spray_cycle, number_of_valve_rinsing_cycles, drying_time, horizontal_spraying, gcode_file_dumped
-    
-    
-    
-    
-    
+
+
+
+
+
     ########## DEFINE THE VARIABLE VALUES (get the values from the GUI)
-    
-    
+
+
     ##### SOLUTION TO USE (Vial valves: A=3, B=4, C=5, Rinse=2, Waste=0, Spray=1; when floating with .5 it always means that the valve links the selected vial to the waste, probably because .0 was not possible)
     # Get values from the entry
     solution_to_use_input = solution_to_use_entry.get()
@@ -255,8 +257,8 @@ def dump_gcode_file_function():
         else:
             solution_to_use_letter = ["A"]
             solution_to_use = [int(3)]
-    
-    
+
+
     ##### WAITING TIME BETWEEN CONSECUTIVE SOLUTIONS
     # Get values from the entry
     waiting_phase_between_solutions_time_input = waiting_phase_between_solutions_time_entry.get()
@@ -285,8 +287,8 @@ def dump_gcode_file_function():
                     waiting_phase_between_solutions_time.append(float(waiting_phase_between_solutions_time_splitted[0]))
                 else:
                     waiting_phase_between_solutions_time.append(float(5))
-    
-    
+
+
     ##### X,Y COORDINATES (for each solution)
     # input("Set the x-axis coordinates of spraying (default: -60,60) (solution '%s')\n[hint: Coordinates for the small area are (-30,30)]\n"
     # input("Set the y-axis coordinates of spraying (default: -80,80) (solution '%s')\n[hint: Coordinates for the small area are (40,80)]\n" %(solution_to_use_letter[i]))
@@ -373,8 +375,8 @@ def dump_gcode_file_function():
                     coordinates_of_spray_y_axis.append((float(-80), float(80)))
         elif len_diff < 0:
             coordinates_of_spray_y_axis = coordinates_of_spray_y_axis[0:len(solution_to_use)]
-    
-    
+
+
     ##### HEAT BED PRESENCE
     # Get values from the entry
     heat_bed_presence = heat_bed_presence_entry.get()
@@ -389,8 +391,8 @@ def dump_gcode_file_function():
     #    pass
     #else:
     #    heat_bed_presence = "n"
-    
-    
+
+
     ##### HEAT BED HEIGHT
     # Get values from the entry
     heat_bed_height = heat_bed_height_entry.get()
@@ -402,8 +404,8 @@ def dump_gcode_file_function():
     # Set it to zero if there is no heat plate
     if heat_bed_presence == "n":
         heat_bed_height = float(0)
-    
-    
+
+
     ##### INTERSPRAY WASH CHOICE
     # Get values from the entry
     interspray_wash_choice_input = interspray_wash_choice_entry.get()
@@ -436,8 +438,8 @@ def dump_gcode_file_function():
                     interspray_wash_choice.append("y")
         elif len_diff < 0:
             interspray_wash_choice = interspray_wash_choice[0:(len(solution_to_use))]
-    
-    
+
+
     ##### HEAT BED TEMPERATURE
     # Get values from the entry
     heat_bed_temperature_input = heat_bed_temperature_entry.get()
@@ -473,8 +475,8 @@ def dump_gcode_file_function():
                     heat_bed_temperature.append(float(0))
         elif len_diff < 0:
             heat_bed_temperature = heat_bed_temperature[0:(len(solution_to_use))]
-    
-    
+
+
     ##### HEIGHT OF THE NEEDLE
     # Get values from the entry
     height_of_the_needle_input = height_of_the_needle_entry.get()
@@ -510,8 +512,8 @@ def dump_gcode_file_function():
                     height_of_the_needle.append(float(60+heat_bed_height))
         elif len_diff < 0:
             height_of_the_needle = height_of_the_needle[0:(len(solution_to_use))]
-    
-    
+
+
     ##### DISTANCE BETWEEN SPRAY LINES
     # Get values from the entry
     distance_between_lines_input = distance_between_lines_entry.get()
@@ -547,8 +549,8 @@ def dump_gcode_file_function():
                     distance_between_lines.append(float(5))
         elif len_diff < 0:
             distance_between_lines = distance_between_lines[0:(len(solution_to_use))]
-    
-    
+
+
     ##### SPEED OF MOVEMENT
     # Get values from the entry
     speed_of_movement_input = speed_of_movement_entry.get()
@@ -584,8 +586,8 @@ def dump_gcode_file_function():
                     speed_of_movement.append(float(150))
         elif len_diff < 0:
             speed_of_movement = speed_of_movement[0:(len(solution_to_use))]
-    
-    
+
+
     ##### MATRIX DENSITY
     # Get values from the entry
     matrix_density_input = matrix_density_entry.get()
@@ -621,8 +623,8 @@ def dump_gcode_file_function():
                     matrix_density.append(float(1))
         elif len_diff < 0:
             matrix_density = matrix_density[0:(len(solution_to_use))]
-    
-    
+
+
     ##### NUMBER OF INITIAL WASH CYCLES
     # Get values from the entry
     number_of_initial_wash_cycles_input = number_of_initial_wash_cycles_entry.get()
@@ -658,8 +660,8 @@ def dump_gcode_file_function():
                     number_of_initial_wash_cycles.append(int(5))
         elif len_diff < 0:
             number_of_initial_wash_cycles = number_of_initial_wash_cycles[0:(len(solution_to_use))]
-    
-    
+
+
     ##### NUMBER OF SPRAY CYCLES
     # Get values from the entry
     number_of_spray_cycles_input = number_of_spray_cycles_entry.get()
@@ -695,8 +697,8 @@ def dump_gcode_file_function():
                     number_of_spray_cycles.append(int(5))
         elif len_diff < 0:
             number_of_spray_cycles = number_of_spray_cycles[0:(len(solution_to_use))]
-    
-    
+
+
     ##### ADDITIONAL TIME TO WAIT AFTER EACH SPRAY CYCLE
     # Get values from the entry
     additional_waiting_time_after_each_spray_cycle_input = additional_waiting_time_after_each_spray_cycle_entry.get()
@@ -732,8 +734,8 @@ def dump_gcode_file_function():
                     additional_waiting_time_after_each_spray_cycle.append(float(0))
         elif len_diff < 0:
             additional_waiting_time_after_each_spray_cycle = additional_waiting_time_after_each_spray_cycle[0:(len(solution_to_use))]
-    
-    
+
+
     ##### NUMBER OF VALVE RINSING CYCLES
     # Get values from the entry
     number_of_valve_rinsing_cycles_input = number_of_valve_rinsing_cycles_entry.get()
@@ -769,8 +771,8 @@ def dump_gcode_file_function():
                     number_of_valve_rinsing_cycles.append(int(5))
         elif len_diff < 0:
             number_of_valve_rinsing_cycles = number_of_valve_rinsing_cycles[0:(len(solution_to_use))]
-    
-    
+
+
     ##### DRYING TIME
     # Get values from the entry
     drying_time_input = drying_time_entry.get()
@@ -784,8 +786,8 @@ def dump_gcode_file_function():
         drying_time = float(drying_time_splitted[0])
     except:
         drying_time = float(8)
-    
-    
+
+
     ##### HORIZONTAL SPRAYING
     # Get values from the entry
     horizontal_spraying_input = horizontal_spraying_entry.get()
@@ -818,18 +820,18 @@ def dump_gcode_file_function():
                     horizontal_spraying.append("y")
         elif len_diff < 0:
             horizontal_spraying = horizontal_spraying[0:(len(solution_to_use))]
-            
-            
+
+
     ##### CONSTANT VALUES (calculations from input values)
-    
+
     # Coordinates of spray z axis
     try:
         coordinates_of_spray_z_axis = []
         for h in height_of_the_needle:
             coordinates_of_spray_z_axis.append(float(-104 + abs(h))) # Calculated
     except:
-        coordinates_of_spray_z_axis = float(-104 + abs(height_of_the_needle)) # Calculated    
-    
+        coordinates_of_spray_z_axis = float(-104 + abs(height_of_the_needle)) # Calculated
+
     # Horizontal spraying
     try:
         for i in range(len(horizontal_spraying)):
@@ -842,10 +844,10 @@ def dump_gcode_file_function():
             horizontal_spraying = True
         else:
             horizontal_spraying = False
-    
-    
+
+
     ##### MACHINE LIMITS (Avoid that the machine breaks)
-    
+
     # Speed
     try:
         for s in range(len(speed_of_movement)):
@@ -862,7 +864,7 @@ def dump_gcode_file_function():
             speed_of_movement = max_speed_of_movement
         if speed_of_movement == 0:
             speed_of_movement = 1
-    
+
     # Needle height (Z coordinate)
     try:
         for c in range(len(coordinates_of_spray_z_axis)):
@@ -875,7 +877,7 @@ def dump_gcode_file_function():
             coordinates_of_spray_z_axis = max_z_coordinates[0]
         elif coordinates_of_spray_z_axis > max_z_coordinates[1]:
             coordinates_of_spray_z_axis = max_z_coordinates[1]
-    
+
     # Matrix density
     try:
         for m in range(len(matrix_density)):
@@ -888,7 +890,7 @@ def dump_gcode_file_function():
             matrix_density = max_matrix_density
         if matrix_density <= 0:
             matrix_density = 1
-    
+
     # X and Y coordinates
     for c in range(len(coordinates_of_spray_x_axis)):
         if coordinates_of_spray_x_axis[c][0] < max_x_coordinates[0]:
@@ -900,14 +902,14 @@ def dump_gcode_file_function():
             coordinates_of_spray_y_axis[c][0] = max_y_coordinates[0]
         if coordinates_of_spray_y_axis[c][1] > max_y_coordinates[1]:
             coordinates_of_spray_y_axis[c][1] = max_y_coordinates[1]
-    
-    
-    
-    
-    
+
+
+
+
+
     ########## GCODE BLOCKS (Fill out the GCODE according to the variables)
-    
-    
+
+
     ##### GO TO WASH POSITION (same for all)
     go_to_wash_position_block = [";;;;; go to wash position\n"]
     go_to_wash_position_subblock = ["G1 Z%s F%s\n" %(float(coordinates_of_z_axis_during_movement), max_speed_of_movement), "G1 X%s Y%s Z%s F%s\n" %(float(coordinates_of_washing_x_axis), float(coordinates_of_washing_y_axis), float(coordinates_of_z_axis_during_movement), max_speed_of_movement), "G1 Z%s\n" %float(coordinates_of_washing_z_axis)]
@@ -916,8 +918,8 @@ def dump_gcode_file_function():
         go_to_wash_position_block.append (s)
     # Leave a white line between blocks
     go_to_wash_position_block.append ("\n")
-    
-    
+
+
     ##### ADDITIONAL WAITING TIME AFTER SPRAYING (solution dependent) (the needle waits at the wash position)
     #try:
      #   additional_waiting_time_after_spraying = [";;; additional waiting time after spraying\n"]
@@ -943,7 +945,7 @@ def dump_gcode_file_function():
         additional_waiting_time_after_spraying_block.append ("; wait still\nG4 S%s\n" %(additional_waiting_time_after_each_spray_cycle))
         # Leave a white line between blocks
         additional_waiting_time_after_spraying_block.append ("\n")
-    
+
     ##### WAITING TIME BETWEEN DIFFERENT SOLUTIONS
     try:
         waiting_phase_between_solutions_block_sol = []
@@ -952,8 +954,8 @@ def dump_gcode_file_function():
             waiting_phase_between_solutions_block_sol.append(waiting_phase_between_solutions_block)
     except:
         waiting_phase_between_solutions_block = None
-    
-    
+
+
     ##### INITIALISATION (same for all)
     initialisation_block = [";;;;;;;;;;;;;;;;;;;; iMatrixSpray gcode method generator\n\n", ";;;;;;;;;; initialisation\n"]
     initialisation_subblock = ["G28XYZ\n", "G28P\n", "G90\n"]
@@ -962,8 +964,8 @@ def dump_gcode_file_function():
         initialisation_block.append (s)
     # Leave a white line between blocks
     initialisation_block.append ("\n")
-    
-    
+
+
     ##### FIRST WASH (solution dependent)
     try:
         first_wash_block_sol = []
@@ -1005,8 +1007,8 @@ def dump_gcode_file_function():
             first_wash_block.append (s)
         # Leave a white line between blocks
         first_wash_block.append ("\n")
-    
-    
+
+
     ##### SPRAYING PHASE (solution dependent)
     try:
         spray_block_sol = []
@@ -1396,7 +1398,7 @@ def dump_gcode_file_function():
             interspray_wash_subblock = [";;;;; wash\n", "M82\n", "G1 V0 F%s\n" %max_speed_of_movement, "G4 S1\n", "G1 P0 F%s\n" %max_speed_of_movement, "M106 S0\n", "G4 S0.0\n"]
             # Generate the definitive block
             for s in interspray_wash_subblock:
-                interspray_wash_block.append (s)                
+                interspray_wash_block.append (s)
             # Leave a white line between blocks
             interspray_wash_block.append ("\n")
             # Add this chunk to the final block
@@ -1413,8 +1415,8 @@ def dump_gcode_file_function():
                 interspray_wash_block.append (s)
         # Leave a white line between blocks
         interspray_wash_block.append ("\n")
-    
-    
+
+
     ##### SYRINGE EMPTYING (solution dependent)
     try:
         syringe_emptying_block_sol = []
@@ -1448,8 +1450,8 @@ def dump_gcode_file_function():
                 syringe_emptying_block.append (s)
         # Leave a white line between blocks
         syringe_emptying_block.append ("\n")
-    
-    
+
+
     ##### SPRAY RINSING (same for all)
     spray_rinsing_block = [";;;;; spray rinsing\n"]
     spray_rinsing_subblock = ["G1 V1.5 F%s\n" %max_speed_of_movement, "G4 S1\n", "G1 P4 F%s\n" %max_speed_of_movement, "G4 S1\n", "G1 V2 F%s\n" %max_speed_of_movement, "G4 S2\n", "G1 V1 F%s\n" %max_speed_of_movement, "G4 S1\n", "G1 F0.1\n", "G1 P0\n", "M106 S0\n"]
@@ -1458,8 +1460,8 @@ def dump_gcode_file_function():
         spray_rinsing_block.append (s)
     # Leave a white line between blocks
     spray_rinsing_block.append ("\n")
-    
-    
+
+
     ##### CAPILLARY RINSING (same for all)
     capillary_rinsing_block = [";;;;; capillary rinsing\n"]
     capillary_rinsing_subblock = ["G1 V1.5 F%s\n" %max_speed_of_movement, "G4 S1\n", "G1 P3 F%s\n" %max_speed_of_movement, "G1 V2 F%s\n" %max_speed_of_movement, "G4 S2\n", "G1 V1 F%s\n" %max_speed_of_movement, "G4 S1\n", "G1 F0.1\n", "G1 P0\n", "G1 P1\n"]
@@ -1468,8 +1470,8 @@ def dump_gcode_file_function():
         capillary_rinsing_block.append (s)
     # Leave a white line between blocks
     capillary_rinsing_block.append ("\n")
-    
-    
+
+
     ##### DRYING (same for all)
     drying_block = [";;;;; drying\n"]
     drying_subblock = ["M106\n", "G1 P0\n", "G4 S%s\n" %drying_time, "M106 S0\n"]
@@ -1478,8 +1480,8 @@ def dump_gcode_file_function():
         drying_block.append (s)
     # Leave a white line between blocks
     drying_block.append ("\n")
-    
-    
+
+
     ##### SPRAY PARKING (same for all)
     parking_spray_block = [";;;;; parking spray\n"]
     parking_spray_subblock = ["G1 Z%s F%s\n" %(float(coordinates_of_z_axis_during_movement), max_speed_of_movement), "G1 X%s Y%s Z%s F%s\n" %(float(initial_x_coordinates), float(initial_y_coordinates), float(coordinates_of_z_axis_during_movement), max_speed_of_movement), "G1 Z%s F%s\n" %(float(coordinates_of_z_rest), max_speed_of_movement)]
@@ -1488,8 +1490,8 @@ def dump_gcode_file_function():
         parking_spray_block.append (s)
     # Leave a white line between blocks
     parking_spray_block.append ("\n")
-    
-    
+
+
     ##### CLEANING PROCEDURE (solution dependent)
     # Go to wash + emptying syringe + rinsing valve + rinsing spray + rinsing capillary + drying + parking spray
     try:
@@ -1542,14 +1544,14 @@ def dump_gcode_file_function():
             cleaning_procedure_block.append (s)
         for s in parking_spray_block:
             cleaning_procedure_block.append (s)
-    
-    
+
+
     ##### MOTORS OFF (same for all)
     motors_off_block = [";;;;;;;;;; motors off\n", "M18\n"]
     # Leave a white line between blocks
     motors_off_block.append ("\n")
-    
-    
+
+
     ##### TEMPERATURE (same for all)
     try:
         heat_bed_temperature_block_sol = []
@@ -1558,19 +1560,19 @@ def dump_gcode_file_function():
             heat_bed_temperature_block_sol.append(heat_bed_temperature_block)
     except:
         heat_bed_temperature_block = [";;;;;;;;;; heat bed temperature\n", "M140 S%s\n" %(heat_bed_temperature), "\n"]
-    
-    
+
+
     ##### HEAT BED OFF (same for all)
     heat_bed_off_block = [";;;;;;;;;; heat bed off\n", "M140 S0\n"]
     # Leave a white line between blocks
     heat_bed_off_block.append ("\n")
-    
-    
-    
-    
-    
+
+
+
+
+
     ########## WRITE THE LINES TO THE OUTPUT FILE
-    
+
     # Move to the working directory (set)
     os.chdir(output_folder)
     # Get the filename from the GUI entry
@@ -1671,7 +1673,7 @@ def dump_gcode_file_function():
 def dump_method_parameters_file_function():
     ##### Dump the methods only if the gcode file has been dumped (so it "records" the values)
     if gcode_file_dumped is True:
-        
+
         ### Solution to use
         # Initialize the CSV line
         solution_to_use_letter_line = ['Solution(s)']
@@ -1682,7 +1684,7 @@ def dump_method_parameters_file_function():
         solution_to_use_letter_line.append('\n')
         # Generate the final CSV line
         solution_to_use_letter_line_csv = ''.join(solution_to_use_letter_line)
-        
+
         ### Waiting phase between solutions
         # Initialize the CSV line
         waiting_phase_between_solutions_time_line = ['Waiting phase between solutions']
@@ -1696,7 +1698,7 @@ def dump_method_parameters_file_function():
         waiting_phase_between_solutions_time_line.append('\n')
         # Generate the final CSV line
         waiting_phase_between_solutions_time_line_csv = ''.join(waiting_phase_between_solutions_time_line)
-        
+
         ### Spray coordinates x-axis
         # Initialize the CSV line
         coordinates_of_spray_x_axis_line = ['Coordinates of spray (X-axis)']
@@ -1710,7 +1712,7 @@ def dump_method_parameters_file_function():
         coordinates_of_spray_x_axis_line.append('\n')
         # Generate the final CSV line
         coordinates_of_spray_x_axis_line_csv = ''.join(coordinates_of_spray_x_axis_line)
-        
+
         ### Spray coordinates y-axis
         # Initialize the CSV line
         coordinates_of_spray_y_axis_line = ['Coordinates of spray (Y-axis)']
@@ -1724,7 +1726,7 @@ def dump_method_parameters_file_function():
         coordinates_of_spray_y_axis_line.append('\n')
         # Generate the final CSV line
         coordinates_of_spray_y_axis_line_csv = ''.join(coordinates_of_spray_y_axis_line)
-        
+
         ### Heat bed presence
         # Initialize the CSV line
         heat_bed_presence_line = ['Heat bed presence']
@@ -1735,7 +1737,7 @@ def dump_method_parameters_file_function():
         heat_bed_presence_line.append('\n')
         # Generate the final CSV line
         heat_bed_presence_line_csv = ''.join(heat_bed_presence_line)
-        
+
         ### Heat bed temperature
         # Initialize the CSV line
         heat_bed_temperature_line = ['Heat bed temperature']
@@ -1746,7 +1748,7 @@ def dump_method_parameters_file_function():
         heat_bed_temperature_line.append('\n')
         # Generate the final CSV line
         cheat_bed_temperature_line_csv = ''.join(heat_bed_temperature_line)
-        
+
         ### Heat bed height
         # Initialize the CSV line
         heat_bed_height_line = ['Heat bed height']
@@ -1756,7 +1758,7 @@ def dump_method_parameters_file_function():
         heat_bed_height_line.append('\n')
         # Generate the final CSV line
         heat_bed_height_line_csv = ''.join(heat_bed_height_line)
-        
+
         ### Interspray wash
         # Initialize the CSV line
         interspray_wash_choice_line = ['Interspray wash']
@@ -1767,7 +1769,7 @@ def dump_method_parameters_file_function():
         interspray_wash_choice_line.append('\n')
         # Generate the final CSV line
         interspray_wash_choice_line_csv = ''.join(interspray_wash_choice_line)
-        
+
         ### Height of the needle
         # Initialize the CSV line
         height_of_the_needle_line = ['Height of the needle']
@@ -1778,7 +1780,7 @@ def dump_method_parameters_file_function():
         height_of_the_needle_line.append('\n')
         # Generate the final CSV line
         height_of_the_needle_line_csv = ''.join(height_of_the_needle_line)
-        
+
         ### Distance between spray lines
         # Initialize the CSV line
         distance_between_lines_line = ['Distance between spray lines']
@@ -1789,7 +1791,7 @@ def dump_method_parameters_file_function():
         distance_between_lines_line.append('\n')
         # Generate the final CSV line
         distance_between_lines_line_csv = ''.join(distance_between_lines_line)
-        
+
         ### Speed of movement
         # Initialize the CSV line
         speed_of_movement_line = ['Speed of movement']
@@ -1800,7 +1802,7 @@ def dump_method_parameters_file_function():
         speed_of_movement_line.append('\n')
         # Generate the final CSV line
         speed_of_movement_line_csv = ''.join(speed_of_movement_line)
-        
+
         ### Matrix density
         # Initialize the CSV line
         matrix_density_line = ['Matrix density']
@@ -1811,7 +1813,7 @@ def dump_method_parameters_file_function():
         matrix_density_line.append('\n')
         # Generate the final CSV line
         matrix_density_line_csv = ''.join(matrix_density_line)
-        
+
         ### Number of initial wash cycles
         # Initialize the CSV line
         number_of_initial_wash_cycles_line = ['Number of initial wash cycles']
@@ -1822,7 +1824,7 @@ def dump_method_parameters_file_function():
         number_of_initial_wash_cycles_line.append('\n')
         # Generate the final CSV line
         number_of_initial_wash_cycles_line_csv = ''.join(number_of_initial_wash_cycles_line)
-        
+
         ### Number of spray cycles
         # Initialize the CSV line
         number_of_spray_cycles_line = ['Number of spray cycles']
@@ -1833,7 +1835,7 @@ def dump_method_parameters_file_function():
         number_of_spray_cycles_line.append('\n')
         # Generate the final CSV line
         number_of_spray_cycles_line_csv = ''.join(number_of_spray_cycles_line)
-        
+
         ### Additional waiting time after each spray cycle
         # Initialize the CSV line
         additional_waiting_time_after_each_spray_cycle_line = ['Additional waiting time after each spray cycle']
@@ -1844,7 +1846,7 @@ def dump_method_parameters_file_function():
         additional_waiting_time_after_each_spray_cycle_line.append('\n')
         # Generate the final CSV line
         additional_waiting_time_after_each_spray_cycle_line_csv = ''.join(additional_waiting_time_after_each_spray_cycle_line)
-        
+
         ### Number of valve rinsing cycles
         # Initialize the CSV line
         number_of_valve_rinsing_cycles_line = ['Number of valve rinsing cycles']
@@ -1855,7 +1857,7 @@ def dump_method_parameters_file_function():
         number_of_valve_rinsing_cycles_line.append('\n')
         # Generate the final CSV line
         number_of_valve_rinsing_cycles_line_csv = ''.join(number_of_valve_rinsing_cycles_line)
-        
+
         ### Drying time
         # Initialize the CSV line
         drying_time_line = ['Drying time']
@@ -1865,7 +1867,7 @@ def dump_method_parameters_file_function():
         drying_time_line.append('\n')
         # Generate the final CSV line
         drying_time_line_csv = ''.join(drying_time_line)
-        
+
         ### Horizontal spraying
         # Initialize the CSV line
         horizontal_spraying_line = ['Horizontal spraying']
@@ -1876,7 +1878,7 @@ def dump_method_parameters_file_function():
         horizontal_spraying_line.append('\n')
         # Generate the final CSV line
         horizontal_spraying_line_csv = ''.join(horizontal_spraying_line)
-        
+
         # Move to the working directory (set)
         os.chdir(output_folder)
         # Get the filename from the GUI entry
@@ -2079,7 +2081,7 @@ elif system_os == "Linux":
 elif system_os == "Mac":
     # Define the fonts
     helvetica_title_bold = font.Font(family = "Helvetica", size = title_font_size, weight = "bold")
-    helvetica_other_normal = font.Font(family = "Helvetica", size = other_font_size, weight = "normal") 
+    helvetica_other_normal = font.Font(family = "Helvetica", size = other_font_size, weight = "normal")
     helvetica_other_bold = font.Font(family = "Helvetica", size = other_font_size, weight = "bold")
     # Use them in the GUI
     title_font = helvetica_title_bold
@@ -2089,7 +2091,7 @@ elif system_os == "Mac":
 else:
     # Define the fonts
     courier_title_bold = font.Font(family = "Courier New", size = title_font_size, weight = "bold")
-    courier_other_normal = font.Font(family = "Courier New", size = other_font_size, weight = "normal") 
+    courier_other_normal = font.Font(family = "Courier New", size = other_font_size, weight = "normal")
     courier_other_bold = font.Font(family = "Courier New", size = other_font_size, weight = "bold")
     # Use them in the GUI
     title_font = courier_title_bold
