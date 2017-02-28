@@ -1,11 +1,11 @@
 #! python3
 
-#################### iMatrixSpray method gcode generator ####################
+#################### iMatrixSpray Method Gcode Generator ####################
 
 # Program version (Specified by the program writer!!!!)
-program_version = "2017.02.23.2"
+program_version = "2017.02.28.1"
 ### GitHub URL where the R file is
-github_iMatrix_url = "https://raw.githubusercontent.com/gmanuel89/iMatrixSpray/master/iMatrixSpray%20-%20Method%20gcode%20generator%20(Python%203%20TclTk%2C%20GUI).py"
+github_iMatrix_url = "https://raw.githubusercontent.com/gmanuel89/iMatrixSpray/master/iMatrixSpray%20Method%20Gcode%20Generator.py"
 ### Name of the file when downloaded
 script_file_name = "iMatrixSpray gcode method generator.py"
 
