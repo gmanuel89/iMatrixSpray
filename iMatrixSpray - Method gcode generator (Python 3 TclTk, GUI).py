@@ -205,6 +205,7 @@ def select_output_folder_function():
     messagebox.showinfo(title="Folder selection", message="Select where to dump the gcode file(s)")
     # Where to save the GCODE file (escape function environment)
     global output_folder
+    tkinter.Tk().withdraw()
     output_folder = filedialog.askdirectory ()
     # Fix the possible non-defined output folder
     if output_folder == "":
