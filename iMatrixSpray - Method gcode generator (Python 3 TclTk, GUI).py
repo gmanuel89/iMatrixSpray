@@ -3,13 +3,13 @@
 #################### iMatrixSpray Method Gcode Generator ####################
 
 # Program version (Specified by the program writer!!!!)
-program_version = "2017.03.01.0"
+program_version = "2017.03.01.1"
 ### GitHub URL where the R file is
 github_url = "https://raw.githubusercontent.com/gmanuel89/iMatrixSpray/master/iMatrixSpray%20Method%20Gcode%20Generator.py"
 ### Name of the file when downloaded
 script_file_name = "iMatrixSpray Method Gcode Generator.py"
 # Change log
-change_log = "1. Added the possibility to dump the CSV file with the parameter list"
+change_log = "1. Added the possibility to dump the CSV file with the parameter list\n2. New GUI\n3. The filename now has the date and time appended so it never overwrites the already dumped one."
 
 
 
@@ -33,7 +33,12 @@ from tkinter import messagebox, Label, Button, Entry, Tk, filedialog, font, Radi
 
 ############################## Initialize the output_folder variable
 output_folder = os.getcwd()
+############################## Initialize the variable which says if the gcode file has been dumped (before dumping the parameter list file)
 gcode_file_dumped = False
+############################## Initialize the gcode method filename
+method_gcode_file_name = "iMatrixSpray method"
+
+
 
 
 
@@ -1595,6 +1600,16 @@ def dump_gcode_file_function():
     os.chdir(output_folder)
     # Get the filename from the GUI entry
     output_file = filename_entry.get()
+    # Try to append the date and time to the filename (so if someone presses the 'Dump gcode' button without changing the name it does not overwrite it, because there is a different time appended)
+    # Escape the function (for method parameter dumping)
+    global final_output_file
+    try:
+        import time
+        current_date = time.strftime("%Y%m%d-%H.%M.%S")
+        output_file = output_file + " (" + current_date + ")"
+    except:
+        pass
+    final_output_file = output_file
     # Add the extension to the file automatically
     if ".gcode" not in output_file:
         output_file = str(output_file) + ".gcode"
@@ -1899,8 +1914,8 @@ def dump_method_parameters_file_function():
 
         # Move to the working directory (set)
         os.chdir(output_folder)
-        # Get the filename from the GUI entry
-        output_file = filename_entry.get()
+        # Get the filename from the 'Dump gcode' function
+        output_file = final_output_file
         # Add the extension to the file automatically
         if ".csv" not in output_file:
             output_file = str(output_file) + " - Method parameters.csv"
@@ -2121,6 +2136,7 @@ else:
 
 
 ########## Labels (with grid positioning)
+check_for_updates_label = Label(window, text=check_for_updates_value, font=label_font).grid(row=0, column=3)
 title_label = Label(window, text="iMatrixSpray Method Gcode Generator", font=title_font).grid(row=0,column=1)
 solution_to_use_label = Label(window, text="Solution(s) to spray with\n(A,B,C or rinse) (default: A)\n", font=label_font).grid(row=1, column=0)
 new_names_label = Label(window, text="Rename the solution(s) to spray with\n(separate the labels with commas)", font=label_font).grid(row=2,column=0)
@@ -2142,7 +2158,6 @@ filename_label = Label(window, text="Set the name of the gcode method file\n(fil
 heat_bed_presence_label = Label(window, text="Heat bed presence\n(y or n, default: y)", font=label_font).grid(row=8, column=2)
 heat_bed_height_label = Label(window, text="Heat bed height\n(default 5mm)", font=label_font).grid(row=10, column=2)
 heat_bed_temperature_label = Label(window, text="Heat bed temperature\n(default 0°C, do not heat)", font=label_font).grid(row=11, column=2)
-check_for_updates_label = Label(window, text=check_for_updates_value, font=label_font).grid(row=2, column=3)
 
 
 
@@ -2196,7 +2211,7 @@ additional_waiting_time_after_each_spray_cycle_entry.insert(0,"0")
 number_of_valve_rinsing_cycles_entry.insert(0,"5")
 drying_time_entry.insert(0,"8")
 horizontal_spraying_entry.insert(0,"y")
-filename_entry.insert(0,"iMatrixSpray method")
+filename_entry.insert(0, method_gcode_file_name)
 heat_bed_presence_yes.select()
 heat_bed_presence_no.deselect()
 heat_bed_height_entry.insert(0,"5")
@@ -2241,7 +2256,7 @@ Button(window, text="Information", relief = "raised", bitmap="info", command=sho
 # Guide
 Button(window, text="Guide", relief = "raised", bitmap="question", command=show_guide).grid(row=1, column=3)
 # Download updates
-Button(window, text="Download updates", relief = "raised", command=download_updates_function).grid(row=2, column=2)
+Button(window, text="Download\nupdates", font = button_font, relief = "raised", command=download_updates_function).grid(row=0, column=2)
 
 # Hold until quit
 window.mainloop()
