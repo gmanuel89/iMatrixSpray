@@ -1983,7 +1983,7 @@ def show_guide():
 ########## FUNCTION: Close the program
 def close_program_function():
     # Collapse the GUI Tk window
-    window.destroy
+    window.destroy()
     # Quit the Python session
     quit()
 
