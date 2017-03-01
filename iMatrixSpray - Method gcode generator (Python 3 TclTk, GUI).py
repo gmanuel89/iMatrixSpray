@@ -3,11 +3,13 @@
 #################### iMatrixSpray Method Gcode Generator ####################
 
 # Program version (Specified by the program writer!!!!)
-program_version = "2017.02.28.1"
+program_version = "2017.03.01.0"
 ### GitHub URL where the R file is
 github_iMatrix_url = "https://raw.githubusercontent.com/gmanuel89/iMatrixSpray/master/iMatrixSpray%20Method%20Gcode%20Generator.py"
 ### Name of the file when downloaded
 script_file_name = "iMatrixSpray Method Gcode Generator.py"
+# Change log
+change_log = "1. Added the possibility to dump the CSV file with the parameter list"
 
 
 
@@ -73,28 +75,42 @@ spray_syringe_volume_per_travel = 16.7
 ########## FUNCTION: Check for updates (from my GitHub page) (it just updates the label telling the user if there are updates) (it updates the check for updates value that is called by the label)
 def check_for_updates_function():
     # Initialize the variable that displays the version number and the possible updates
-    global check_for_updates_value, update_available
+    global check_for_updates_value, update_available, online_change_log
     check_for_updates_value = program_version
     # Initialize the version
     online_version_number = None
     # Initialize the variable that says if there are updates
     update_available = False
+    ### Initialize the change log
+    online_change_log = "Bug fixes"
     try:
         # Import the library
         import urllib.request
-        # Retrieve the file from GitHub
-        github_file = urllib.request.urlopen(github_iMatrix_url).read()
-        # String conversion
-        github_file_string = str(github_file)
-        # Lines
-        github_file_lines = github_file_string.split("\\\\n")
-        # Get the first line, with the version number
-        first_block = github_file_lines[0].split("\\n")
+        # Retrieve the file from GitHub (read the lines: list with lines)
+        github_file_lines = urllib.request.urlopen(github_url).readlines()
+        # Decode the lines (from bytes to character)
+        for l in range(len(github_file_lines)):
+            github_file_lines[l] = github_file_lines[l].decode("utf-8")
         # Retrieve the version number
-        for line in first_block:
+        for line in github_file_lines:
             if line.startswith("program_version = "):
+                # Isolate the "variable" value
                 online_version_number = line.split("program_version = ")[1]
+                # Remove the quotes
                 online_version_number = online_version_number.split("\"")[1]
+        ### Retrieve the change log
+        for line in github_file_lines:
+            if line.startswith("change_log = "):
+                # Isolate the "variable" value
+                online_change_log = line.split("change_log = ")[1]
+                # Remove the quotes
+                online_change_log = online_change_log.split("\"")[1]
+                # Split at the \n
+                online_change_log_split = online_change_log.split("\\n")
+                # Put it back to the character
+                online_change_log = ""
+                for o in online_change_log_split:
+                    online_change_log = online_change_log + "\n" + o
         # Split the version number in YYYY.MM.DD
         online_version_YYYYMMDDVV = online_version_number.split(".")
         # Compare with the local version
@@ -158,6 +174,8 @@ def download_updates_function():
         if file_downloaded is True:
             Tk().withdraw()
             messagebox.showinfo(title="Updated file retrieved!", message="The update file named\n%s\nhas been retrieved and placed in\n%s" %(script_file_name, download_folder))
+            Tk().withdraw()
+            messagebox.showinfo(title="Changelog", message="The updated script contains the following changes:\n%s" %(online_change_log))
         else:
             Tk().withdraw()
             messagebox.showinfo(title="Connection problem", message="The updated script file could not be downloaded due to internet connection problems!\n\nManually download the updated script file at:\n\n%s" %(github_iMatrix_url))
@@ -1921,7 +1939,7 @@ def dump_method_parameters_file_function():
 
 
 
-########## FUNCTION: Select where to save the GCODE method file
+########## FUNCTION: Show the iMatrixSpray Method Gcode Generator info
 def show_info():
     Tk().withdraw()
     messagebox.showinfo(title="Info", message="This Gcode Method Generator for the iMatrixSpray\nhas been written by MANUEL GALLI\nfrom the University of Milano-Bicocca\nin the Python 3 programming language\n\n\n\n\nGitHub page:\n\nhttps://github.com/gmanuel89/\n\n\n\n\nThe source code can be found at:\n\nhttps://github.com/gmanuel89/iMatrixSpray/blob/master/iMatrixSpray - Method gcode generator (Python 3 TclTk, GUI).py")
@@ -1934,7 +1952,7 @@ def show_info():
 
 
 
-########## FUNCTION: Select where to save the GCODE method file
+########## FUNCTION: Show the iMatrixSpray Method Gcode Generator guide
 def show_guide():
     Tk().withdraw()
     messagebox.showinfo(title="Help", message="Help on the iMatrixSpray parameters can be found here:\n\nhttps://github.com/gmanuel89/iMatrixSpray/blob/master/README.md\n\n\n\n\nThe iMatrixSpray device official website is:\n\nhttps://imatrixspray.com/")
@@ -1999,7 +2017,7 @@ check_for_updates_function()
 
 ########## Main window
 window = Tk()
-window.title("iMatrixSpray Gcode Method Generator")
+window.title("iMatrixSpray Method Gcode Generator")
 window.resizable(False,False)
 #window.wm_minsize(width=550, height=600)
 
@@ -2103,7 +2121,7 @@ else:
 
 
 ########## Labels (with grid positioning)
-title_label = Label(window, text="iMatrixSpray method generator", font=title_font).grid(row=0,column=1)
+title_label = Label(window, text="iMatrixSpray Method Gcode Generator", font=title_font).grid(row=0,column=1)
 solution_to_use_label = Label(window, text="Solution(s) to spray with\n(A,B,C or rinse) (default: A)\n", font=label_font).grid(row=1, column=0)
 new_names_label = Label(window, text="Rename the solution(s) to spray with\n(separate the labels with commas)", font=label_font).grid(row=2,column=0)
 waiting_phase_between_solutions_time_label = Label(window, text="Set how much the device has to wait\nbefore switching between two consecutive solutions\n(separate the times with commas) (default: 5s)", font=label_font).grid(row=3, column=0)
