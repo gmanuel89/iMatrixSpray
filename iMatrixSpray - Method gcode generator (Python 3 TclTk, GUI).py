@@ -5,7 +5,7 @@
 # Program version (Specified by the program writer!!!!)
 program_version = "2017.03.01.0"
 ### GitHub URL where the R file is
-github_iMatrix_url = "https://raw.githubusercontent.com/gmanuel89/iMatrixSpray/master/iMatrixSpray%20Method%20Gcode%20Generator.py"
+github_url = "https://raw.githubusercontent.com/gmanuel89/iMatrixSpray/master/iMatrixSpray%20Method%20Gcode%20Generator.py"
 ### Name of the file when downloaded
 script_file_name = "iMatrixSpray Method Gcode Generator.py"
 # Change log
@@ -167,7 +167,7 @@ def download_updates_function():
             import urllib.request
             # Download the new file in the working directory
             os.chdir(download_folder)
-            urllib.request.urlretrieve (github_iMatrix_url, script_file_name)
+            urllib.request.urlretrieve (github_url, script_file_name)
             file_downloaded = True
         except:
             pass
@@ -178,7 +178,7 @@ def download_updates_function():
             messagebox.showinfo(title="Changelog", message="The updated script contains the following changes:\n%s" %(online_change_log))
         else:
             Tk().withdraw()
-            messagebox.showinfo(title="Connection problem", message="The updated script file could not be downloaded due to internet connection problems!\n\nManually download the updated script file at:\n\n%s" %(github_iMatrix_url))
+            messagebox.showinfo(title="Connection problem", message="The updated script file could not be downloaded due to internet connection problems!\n\nManually download the updated script file at:\n\n%s" %(github_url))
     else:
         check_for_updates_value = "Version: %s\nNo updates available" %(program_version)
         Tk().withdraw()
