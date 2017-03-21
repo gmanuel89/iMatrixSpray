@@ -3,7 +3,7 @@
 #################### iMatrixSpray Method Gcode Generator ####################
 
 # Program version (Specified by the program writer!!!!)
-program_version = "2017.03.01.1"
+program_version = "2017.03.21.0"
 ### GitHub URL where the R file is
 github_url = "https://raw.githubusercontent.com/gmanuel89/iMatrixSpray/master/iMatrixSpray%20Method%20Gcode%20Generator.py"
 ### Name of the file when downloaded
