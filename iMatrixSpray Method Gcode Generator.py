@@ -3,7 +3,7 @@
 #################### iMatrixSpray Method Gcode Generator ####################
 
 # Program version (Specified by the program writer!!!!)
-program_version = "2017.03.29.0"
+program_version = "2017.04.19.0"
 ### GitHub URL where the R file is
 github_url = "https://raw.githubusercontent.com/gmanuel89/iMatrixSpray/master/iMatrixSpray%20Method%20Gcode%20Generator.py"
 ### Name of the file when downloaded
@@ -36,7 +36,7 @@ output_folder = os.getcwd()
 ############################## Initialize the variable which says if the gcode file has been dumped (before dumping the parameter list file)
 gcode_file_dumped = False
 ############################## Initialize the gcode method filename
-method_gcode_file_name = "iMatrixSpray Method Gcode"
+method_gcode_file_name = "iMatrixSpray method gcode"
 
 
 
@@ -139,7 +139,7 @@ def check_for_updates_function():
         else:
             if update_available is True:
                 # The version number could not be ckecked due to internet problems
-                check_for_updates_value = "Version: %s\nUpdates available: %s" %(program_version, online_version_number)
+                check_for_updates_value = "Version: %s\nUpdate available:\n%s" %(program_version, online_version_number)
             else:
                 check_for_updates_value = "Version: %s\nNo updates available" %(program_version)
     # Something went wrong: library not installed, retrieving failed, errors in parsing the version number
@@ -1967,19 +1967,19 @@ def dump_method_parameters_file_function():
 def show_info():
     Tk().withdraw()
     messagebox.showinfo(title="Info", message="This Gcode Method Generator for the iMatrixSpray\nhas been written by MANUEL GALLI\nfrom the University of Milano-Bicocca\nin the Python 3 programming language\n\n\n\n\nGitHub page:\n\nhttps://github.com/gmanuel89/\n\n\n\n\nThe source code can be found at:\n\nhttps://github.com/gmanuel89/iMatrixSpray/blob/master/iMatrixSpray - Method gcode generator (Python 3 TclTk, GUI).py")
-
-
-
-
-
-
-
-
-
-########## FUNCTION: Show the iMatrixSpray Method Gcode Generator guide
-def show_guide():
     Tk().withdraw()
     messagebox.showinfo(title="Help", message="Help on the iMatrixSpray parameters can be found here:\n\nhttps://github.com/gmanuel89/iMatrixSpray/blob/master/README.md\n\n\n\n\nThe iMatrixSpray device official website is:\n\nhttps://imatrixspray.com/")
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2042,7 +2042,8 @@ check_for_updates_function()
 ########## Main window
 window = Tk()
 window.title("iMatrixSpray Method Gcode Generator")
-window.resizable(False,False)
+window.resizable(False, False)
+window.configure(background = "white")
 #window.wm_minsize(width=550, height=600)
 
 # Get the resolution of the screen (to adjust the font size accordingly)
@@ -2090,11 +2091,17 @@ elif system_os == "Linux":
         ubuntu_title_bold = font.Font(family = "Ubuntu", size = title_font_size, weight = "bold")
         ubuntu_other_normal = font.Font(family = "Ubuntu", size = other_font_size, weight = "normal")
         ubuntu_other_bold = font.Font(family = "Ubuntu", size = other_font_size, weight = "bold")
+        bitstream_charter_title_bold = font.Font(family = "Bitstream Charter", size = title_font_size, weight = "bold")
+        bitstream_charter_other_normal = font.Font(family = "Bitstream Charter", size = other_font_size, weight = "normal")
+        bitstream_charter_other_bold = font.Font(family = "Bitstream Charter", size = other_font_size, weight = "bold")
+        liberation_title_bold = font.Font(family = "Liberation Sans", size = title_font_size, weight = "bold")
+        liberation_other_normal = font.Font(family = "Liberation Sans", size = other_font_size, weight = "normal")
+        liberation_other_bold = font.Font(family = "Liberation Sans", size = other_font_size, weight = "bold")
         # Use them in the GUI
-        title_font = ubuntu_title_bold
-        label_font = ubuntu_other_normal
-        entry_font = ubuntu_other_normal
-        button_font = ubuntu_other_bold
+        title_font = bitstream_charter_title_bold
+        label_font = bitstream_charter_other_normal
+        entry_font = bitstream_charter_other_normal
+        button_font = bitstream_charter_other_bold
     # Fedora
     elif "Fedora" in linux_distro or "Fedora" in os_version:
         # Define the fonts
@@ -2144,42 +2151,38 @@ else:
 
 
 
-########## Labels (with grid positioning)
-check_for_updates_label = Label(window, text=check_for_updates_value, font=label_font).grid(row=0, column=3)
-title_label = Label(window, text="iMatrixSpray Method Gcode Generator", font=title_font).grid(row=0,column=1)
-solution_to_use_label = Label(window, text="Solution(s) to spray with\n(A,B,C or rinse) (default: A)\n", font=label_font).grid(row=1, column=0)
-new_names_label = Label(window, text="Rename the solution(s) to spray with\n(separate the labels with commas)", font=label_font).grid(row=2,column=0)
-waiting_phase_between_solutions_time_label = Label(window, text="Set how much the device has to wait\nbefore switching between two consecutive solutions\n(separate the times with commas) (default: 5s)", font=label_font).grid(row=3, column=0)
-coordinates_of_spray_x_axis_label = Label(window, text="Set the x-axis coordinates of spraying (default: -60:60),\nin this format: x1:x2, x1:x2\n[hint: Coordinates for the small area are (-30:30)]", font=label_font).grid(row=4, column=0)
-coordinates_of_spray_y_axis_label = Label(window, text="Set the y-axis coordinates of spraying (default: -80:80),\nin this format: y1:y2, y1:y2\n[hint: Coordinates for the small area are (40:60)]", font=label_font).grid(row=5, column=0)
-height_of_the_needle_label = Label(window, text="Set the height of the needle (in millimeters)\n(default: 60mm)", font=label_font).grid(row=6, column=0)
-distance_between_spray_lines_label = Label(window, text="Set the distance between lines when spraying\n(default: 5mm)", font=label_font).grid(row=7, column=0)
-speed_of_movement_label = Label(window, text="Set the speed of movement\n(max: 200, default: 150)", font=label_font).grid(row=8, column=0)
-matrix_density_label = Label(window, text="Set the density of the matrix on-tissue\n(in microlitres per squared centimeter) (max: 10, default: 1)", font=label_font).grid(row=9, column=0)
-number_of_initial_wash_cycles_label = Label(window, text="Set the number of initial wash cycles\n(default: 5)", font=label_font).grid(row=10, column=0)
-number_of_spray_cycles_label = Label(window, text="Set the number of spraying cycles\n(default:2)", font=label_font).grid(row=11, column=0)
-interspray_wash_choice_label = Label(window, text="Should the device perform the interspray rinse?\n(default: y)", font=label_font).grid(row=12, column=2)
-additional_waiting_time_between_cycles_label = Label(window, text="Set the additional time (in seconds)\nto wait after each spraying cycle (default:0s)", font=label_font).grid(row=12, column=0)
-number_of_valve_rinsing_cycles_label = Label(window, text="Set the number of valve rinsing cycles\nwith the rinsing solution (default: 5)", font=label_font).grid(row=13, column=0)
-drying_time_label = Label(window, text="Set the drying time\nfor the needle after rinsing (default: 8s)", font=label_font).grid(row=14, column=0)
-horizontal_spraying_label = Label(window, text="Spray horizontally?\n(y or n, default: y)", font=label_font).grid(row=15, column=0)
-filename_label = Label(window, text="Set the name of the gcode method file\n(file extension is automatically added)", font=label_font).grid(row=16, column=0)
-heat_bed_presence_label = Label(window, text="Heat bed presence\n(y or n, default: y)", font=label_font).grid(row=8, column=2)
-heat_bed_height_label = Label(window, text="Heat bed height\n(default 5mm)", font=label_font).grid(row=10, column=2)
-heat_bed_temperature_label = Label(window, text="Heat bed temperature\n(default 0°C, do not heat)", font=label_font).grid(row=11, column=2)
-
-
-
+########## Labels
+# Title / Info
+title_label = Button(window, text="iMatrixSpray Method Gcode Generator", relief = "flat", command = show_info, background = "white", font = title_font)
+# Other labels
+check_for_updates_label = Label(window, text=check_for_updates_value, font=label_font, background = "white", width = 30)
+solution_to_use_label = Label(window, text="Solution(s) to spray with\n(A,B,C or rinse) (default: A)\n", font=label_font, background = "white", width = 30)
+new_names_label = Label(window, text="Rename the solution(s) to spray with\n(separate the labels with commas)", font=label_font, background = "white", width = 50)
+waiting_phase_between_solutions_time_label = Label(window, text="Set how much the device has to wait\nbefore switching between two consecutive solutions\n(separate the times with commas) (default: 5s)", font=label_font, background = "white", width = 50)
+coordinates_of_spray_x_axis_label = Label(window, text="Set the x-axis coordinates of spraying (default: -60:60),\nin this format: x1:x2, x1:x2\n[hint: Coordinates for the small area are (-30:30)]", font=label_font, background = "white", width = 50)
+coordinates_of_spray_y_axis_label = Label(window, text="Set the y-axis coordinates of spraying (default: -80:80),\nin this format: y1:y2, y1:y2\n[hint: Coordinates for the small area are (40:60)]", font=label_font, background = "white", width = 50)
+height_of_the_needle_label = Label(window, text="Set the height of the needle (in millimeters)\n(default: 60mm)", font=label_font, background = "white", width = 50)
+distance_between_spray_lines_label = Label(window, text="Set the distance between lines when spraying\n(default: 5mm)", font=label_font, background = "white", width = 50)
+speed_of_movement_label = Label(window, text="Set the speed of movement\n(max: 200, default: 150)", font=label_font, background = "white", width = 50)
+matrix_density_label = Label(window, text="Set the density of the matrix on-tissue\n(in microlitres per squared centimeter) (max: 10, default: 1)", font=label_font, background = "white", width = 60)
+number_of_initial_wash_cycles_label = Label(window, text="Set the number of initial wash cycles\n(default: 5)", font=label_font, background = "white", width = 50)
+number_of_spray_cycles_label = Label(window, text="Set the number of spraying cycles\n(default:2)", font=label_font, background = "white", width = 50)
+interspray_wash_choice_label = Label(window, text="Should the device perform the interspray rinse?\n(default: y)", font=label_font, background = "white", width = 50)
+additional_waiting_time_between_cycles_label = Label(window, text="Set the additional time (in seconds)\nto wait after each spraying cycle (default:0s)", font=label_font, background = "white", width = 50)
+number_of_valve_rinsing_cycles_label = Label(window, text="Set the number of valve rinsing cycles\nwith the rinsing solution (default: 5)", font=label_font, background = "white", width = 50)
+drying_time_label = Label(window, text="Set the drying time\nfor the needle after rinsing (default: 8s)", font=label_font, background = "white", width = 50)
+horizontal_spraying_label = Label(window, text="Spray horizontally?\n(y or n, default: y)", font=label_font, background = "white", width = 50)
+filename_label = Label(window, text="Set the name of the gcode method file\n(file extension is automatically added)", font=label_font, background = "white", width = 40)
+heat_bed_presence_label = Label(window, text="Heat bed presence", font=label_font, background = "white", width = 50)
+heat_bed_height_label = Label(window, text="Heat bed height\n(default 5mm)", font=label_font, background = "white", width = 50)
+heat_bed_temperature_label = Label(window, text="Heat bed temperature\n(default 0°C, do not heat)", font=label_font, background = "white", width = 50)
 
 
 ########## Variables for Radiobuttons
 heat_bed_presence_entry = StringVar()
 
 
-
-
-
-########## Entry boxes / Radiobuttons (with positioning)
+########## Entry boxes / Radiobuttons
 solution_to_use_entry = Entry(window, font=entry_font, justify="center")
 new_names_entry = Entry(window, font=entry_font, justify="center")
 waiting_phase_between_solutions_time_entry = Entry(window, font=entry_font, justify="center")
@@ -2196,12 +2199,11 @@ additional_waiting_time_after_each_spray_cycle_entry = Entry(window, font=entry_
 number_of_valve_rinsing_cycles_entry = Entry(window, font=entry_font, justify="center")
 drying_time_entry = Entry(window, font=entry_font, justify="center")
 horizontal_spraying_entry = Entry(window, font=entry_font, justify="center")
-filename_entry = Entry(window, font=entry_font, justify="center")
-heat_bed_presence_yes = Radiobutton(window, text="Yes", variable=heat_bed_presence_entry, value="y", font=entry_font, justify="center")
-heat_bed_presence_no = Radiobutton(window, text="No", variable=heat_bed_presence_entry, value="n", font=entry_font, justify="center")
+filename_entry = Entry(window, font=entry_font, justify="center", width = 30)
+heat_bed_presence_yes = Radiobutton(window, text="Yes", variable=heat_bed_presence_entry, value="y", font=entry_font, justify="center", background = "white")
+heat_bed_presence_no = Radiobutton(window, text="No", variable=heat_bed_presence_entry, value="n", font=entry_font, justify="center", background = "white")
 heat_bed_height_entry = Entry(window, font=entry_font, justify="center")
 heat_bed_temperature_entry = Entry(window, font=entry_font, justify="center")
-
 
 
 ########## Entry boxes / Radiobuttons (default values)
@@ -2227,45 +2229,73 @@ heat_bed_height_entry.insert(0,"5")
 heat_bed_temperature_entry.insert(0,"0")
 
 
-########## Positioning
-solution_to_use_entry.grid(row=1, column=1)
-new_names_entry.grid(row=2, column=1)
-waiting_phase_between_solutions_time_entry.grid(row=3, column=1)
-coordinates_of_spray_x_axis_entry.grid(row=4, column=1)
-coordinates_of_spray_y_axis_entry.grid(row=5, column=1)
-height_of_the_needle_entry.grid(row=6, column=1)
-distance_between_lines_entry.grid(row=7, column=1)
-speed_of_movement_entry.grid(row=8, column=1)
-matrix_density_entry.grid(row=9, column=1)
-number_of_initial_wash_cycles_entry.grid(row=10, column=1)
-number_of_spray_cycles_entry.grid(row=11, column=1)
-interspray_wash_choice_entry.grid(row=12, column=3)
-additional_waiting_time_after_each_spray_cycle_entry.grid(row=12, column=1)
-number_of_valve_rinsing_cycles_entry.grid(row=13, column=1)
-drying_time_entry.grid(row=14, column=1)
-horizontal_spraying_entry.grid(row=15, column=1)
-filename_entry.grid(row=16, column=1)
-heat_bed_presence_yes.grid(row=8, column=3)
-heat_bed_presence_no.grid(row=9, column=3)
-heat_bed_height_entry.grid(row=10, column=3)
-heat_bed_temperature_entry.grid(row=11, column=3)
-
-
-
-########## Buttons (with positioning)
-Button(window, text='QUIT', font = button_font, command=close_program_function).grid(row=17, column=3)
+########## Buttons
+quit_button = Button(window, text='QUIT', font = button_font, command=close_program_function, background = "white")
 # Dump the file
-Button(window, text='DUMP GCODE\nMETHOD FILE', font = button_font, command=dump_gcode_file_function).grid(row=17, column=1)
+dump_method_file_button = Button(window, text='DUMP GCODE\nMETHOD FILE', font = button_font, command=dump_gcode_file_function, background = "white")
 # Dump the method parameters file
-Button(window, text='DUMP METHOD\nPARAMETERS FILE...', font = button_font, command=dump_method_parameters_file_function).grid(row=17, column=2)
+dump_method_parameters_file_button = Button(window, text='DUMP METHOD\nPARAMETERS FILE...', font = button_font, command=dump_method_parameters_file_function, background = "white")
 # Output folder
-Button(window, text="BROWSE OUTPUT\nFOLDER...", font = button_font, command=select_output_folder_function).grid(row=17, column=0)
-# Info
-Button(window, text="Information", relief = "raised", bitmap="info", command=show_info).grid(row=1, column=2)
-# Guide
-Button(window, text="Guide", relief = "raised", bitmap="question", command=show_guide).grid(row=1, column=3)
+browse_output_button = Button(window, text="BROWSE OUTPUT\nFOLDER...", font = button_font, command=select_output_folder_function, background = "white")
 # Download updates
-Button(window, text="DOWNLOAD\nUPDATE...", font = button_font, relief = "raised", command=download_updates_function).grid(row=0, column=2)
+download_updates_button = Button(window, text="DOWNLOAD\nUPDATE...", font = button_font, relief = "raised", command=download_updates_function, background = "white")
+
+
+
+########## Positioning
+# Labels
+check_for_updates_label.grid(row=0, column=3, padx = 2, pady = 2)
+title_label.grid(row=0, column=0, columnspan = 2, padx = 20, pady = 20)
+solution_to_use_label.grid(row=1, column=1, padx = 2, pady = 2)
+new_names_label.grid(row=2,column=0, padx = 2, pady = 2)
+waiting_phase_between_solutions_time_label.grid(row=2, column=2, padx = 2, pady = 2)
+coordinates_of_spray_x_axis_label.grid(row=4, column=0, padx = 2, pady = 2)
+coordinates_of_spray_y_axis_label.grid(row=4, column=2, padx = 2, pady = 2)
+height_of_the_needle_label.grid(row=6, column=0, padx = 2, pady = 2)
+distance_between_spray_lines_label.grid(row=6, column=2, padx = 2, pady = 2)
+speed_of_movement_label.grid(row=8, column=0, padx = 2, pady = 2)
+matrix_density_label.grid(row=9, column=0, padx = 2, pady = 2)
+number_of_initial_wash_cycles_label.grid(row=10, column=0, padx = 2, pady = 2)
+number_of_spray_cycles_label.grid(row=11, column=0, padx = 2, pady = 2)
+interspray_wash_choice_label.grid(row=14, column=2, padx = 2, pady = 2)
+additional_waiting_time_between_cycles_label.grid(row=12, column=0, padx = 2, pady = 2)
+number_of_valve_rinsing_cycles_label.grid(row=13, column=0, padx = 2, pady = 2)
+drying_time_label.grid(row=14, column=0, padx = 2, pady = 2)
+horizontal_spraying_label.grid(row=8, column=2, padx = 2, pady = 2)
+filename_label.grid(row=16, column=1, padx = 2, pady = 2)
+heat_bed_presence_label.grid(row=10, column=2, rowspan = 2, padx = 2, pady = 2)
+heat_bed_height_label.grid(row=12, column=2, padx = 2, pady = 2)
+heat_bed_temperature_label.grid(row=13, column=2, padx = 2, pady = 2)
+# Entries and RadioButtons
+solution_to_use_entry.grid(row=1, column=2, padx = 2, pady = 2)
+new_names_entry.grid(row=2, column=1, padx = 2, pady = 2)
+waiting_phase_between_solutions_time_entry.grid(row=2, column=3, padx = 2, pady = 2)
+coordinates_of_spray_x_axis_entry.grid(row=4, column=1, padx = 2, pady = 2)
+coordinates_of_spray_y_axis_entry.grid(row=4, column=3, padx = 2, pady = 2)
+height_of_the_needle_entry.grid(row=6, column=1, padx = 2, pady = 2)
+distance_between_lines_entry.grid(row=6, column=3, padx = 2, pady = 2)
+speed_of_movement_entry.grid(row=8, column=1, padx = 2, pady = 2)
+matrix_density_entry.grid(row=9, column=1, padx = 2, pady = 2)
+number_of_initial_wash_cycles_entry.grid(row=10, column=1, padx = 2, pady = 2)
+number_of_spray_cycles_entry.grid(row=11, column=1, padx = 2, pady = 2)
+interspray_wash_choice_entry.grid(row=14, column=3, padx = 2, pady = 2)
+additional_waiting_time_after_each_spray_cycle_entry.grid(row=12, column=1, padx = 2, pady = 2)
+number_of_valve_rinsing_cycles_entry.grid(row=13, column=1, padx = 2, pady = 2)
+drying_time_entry.grid(row=14, column=1, padx = 2, pady = 2)
+horizontal_spraying_entry.grid(row=8, column=3, padx = 2, pady = 2)
+filename_entry.grid(row=16, column=2, padx = 2, pady = 2)
+heat_bed_presence_yes.grid(row=10, column=3, padx = 2, pady = 2)
+heat_bed_presence_no.grid(row=11, column=3, padx = 2, pady = 2)
+heat_bed_height_entry.grid(row=12, column=3, padx = 2, pady = 2)
+heat_bed_temperature_entry.grid(row=13, column=3, padx = 2, pady = 2)
+# Buttons
+quit_button.grid(row=17, column=3, padx = 2, pady = 2)
+dump_method_file_button.grid(row=17, column=1, padx = 2, pady = 2)
+dump_method_parameters_file_button.grid(row=17, column=2, padx = 2, pady = 2)
+browse_output_button.grid(row=17, column=0, padx = 2, pady = 2)
+download_updates_button.grid(row=0, column=2, padx = 2, pady = 2)
+
+
 
 # Hold until quit
 window.mainloop()
