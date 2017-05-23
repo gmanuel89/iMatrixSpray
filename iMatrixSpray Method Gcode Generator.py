@@ -3,9 +3,11 @@
 #################### iMatrixSpray Method Gcode Generator ####################
 
 # Program version (Specified by the program writer!!!!)
-program_version = "2017.04.19.0"
+program_version = "2017.05.23.0"
 ### GitHub URL where the R file is
 github_url = "https://raw.githubusercontent.com/gmanuel89/iMatrixSpray/master/iMatrixSpray%20Method%20Gcode%20Generator.py"
+### GitHub URL of the program's WIKI
+github_wiki_url = "https://github.com/gmanuel89/iMatrixSpray/wiki"
 ### Name of the file when downloaded
 script_file_name = "iMatrixSpray Method Gcode Generator"
 # Change log
@@ -1965,10 +1967,14 @@ def dump_method_parameters_file_function():
 
 ########## FUNCTION: Show the iMatrixSpray Method Gcode Generator info
 def show_info():
-    Tk().withdraw()
-    messagebox.showinfo(title="Info", message="This Gcode Method Generator for the iMatrixSpray\nhas been written by MANUEL GALLI\nfrom the University of Milano-Bicocca\nin the Python 3 programming language\n\n\n\n\nGitHub page:\n\nhttps://github.com/gmanuel89/\n\n\n\n\nThe source code can be found at:\n\nhttps://github.com/gmanuel89/iMatrixSpray/blob/master/iMatrixSpray - Method gcode generator (Python 3 TclTk, GUI).py")
-    Tk().withdraw()
-    messagebox.showinfo(title="Help", message="Help on the iMatrixSpray parameters can be found here:\n\nhttps://github.com/gmanuel89/iMatrixSpray/blob/master/README.md\n\n\n\n\nThe iMatrixSpray device official website is:\n\nhttps://imatrixspray.com/")
+    # Retrieve the system
+    system_os = platform.system()
+    if system_os == "Linux":
+        os.system("xdg-open " + github_wiki_url)
+    elif system_os == "Darwin":
+        os.system("open " + github_wiki_url)
+    elif system_os == "Windows":
+        os.system("cmd /c start " + github_wiki_url)
 
 
 
