@@ -113,8 +113,14 @@ def check_for_updates_function():
         for line in github_file_lines:
             if line.startswith("force_update = "):
                 # Isolate the "variable" value
-                online_force_update = bool(line.split("force_update = ")[1])
-            if online_force_update is None:
+                online_force_update = line.split("force_update = ")[1]
+                # Split at the \n
+                online_force_update = online_force_update.split("\n")[0]
+            if online_force_update == "False":
+                online_force_update = False
+            elif online_force_update == "True":
+                online_force_update = True
+            elif online_force_update is None:
                 online_force_update = False
         ### Retrieve the change log
         for line in github_file_lines:
@@ -124,7 +130,7 @@ def check_for_updates_function():
                 # Remove the quotes
                 online_change_log = online_change_log.split("\"")[1]
                 # Split at the \n
-                online_change_log_split = online_change_log.split("\\n")
+                online_change_log_split = online_change_log.split("\n")
                 # Put it back to the character
                 online_change_log = ""
                 for o in online_change_log_split:
