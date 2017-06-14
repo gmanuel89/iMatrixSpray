@@ -221,6 +221,7 @@ def download_updates_function():
 
 ### Downloading forced updates
 check_for_updates_function()
+
 if online_force_update is True:
     download_updates_function()
 
@@ -2064,8 +2065,6 @@ def close_program_function():
 
 
 ############################## TCL-TK WINDOW
-##### Check for updates
-check_for_updates_function()
 
 ########## Main window
 window = Tk()
