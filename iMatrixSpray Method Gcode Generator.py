@@ -2,8 +2,10 @@
 
 #################### iMatrixSpray Method Gcode Generator ####################
 
-# Program version (Specified by the program writer!!!!)
-program_version = "2017.05.23.0"
+### Program version (Specified by the program writer!!!!)
+program_version = "2017.06.14.0"
+### Force update (in case something goes wrong after an update, when checking for updates and reading the variable force_update, the script can automatically download the latest working version, even if the rest of the script is corrupted, because it is the first thing that reads)
+force_update = False
 ### GitHub URL where the R file is
 github_url = "https://raw.githubusercontent.com/gmanuel89/iMatrixSpray/master/iMatrixSpray%20Method%20Gcode%20Generator.py"
 ### GitHub URL of the program's WIKI
@@ -82,10 +84,12 @@ spray_syringe_volume_per_travel = 16.7
 ########## FUNCTION: Check for updates (from my GitHub page) (it just updates the label telling the user if there are updates) (it updates the check for updates value that is called by the label)
 def check_for_updates_function():
     # Initialize the variable that displays the version number and the possible updates
-    global check_for_updates_value, update_available, online_change_log, online_version_number
+    global check_for_updates_value, update_available, online_change_log, online_version_number, online_force_update
     check_for_updates_value = program_version
     # Initialize the version
     online_version_number = None
+    ### Initialize the force update
+    online_force_update = False
     # Initialize the variable that says if there are updates
     update_available = False
     ### Initialize the change log
@@ -105,6 +109,13 @@ def check_for_updates_function():
                 online_version_number = line.split("program_version = ")[1]
                 # Remove the quotes
                 online_version_number = online_version_number.split("\"")[1]
+        ### Retrieve the online force update
+        for line in github_file_lines:
+            if line.startswith("force_update = "):
+                # Isolate the "variable" value
+                online_force_update = bool(line.split("force_update = ")[1])
+            if online_force_update is None:
+                online_force_update = False
         ### Retrieve the change log
         for line in github_file_lines:
             if line.startswith("change_log = "):
@@ -164,7 +175,7 @@ def download_updates_function():
     # Initialize the variable that displays the version number
     global check_for_updates_value
     # Download updates only if there are updates available
-    if update_available is True:
+    if update_available is True or online_force_update is True:
         # Initialize the variable which says if the file has been downloaded successfully
         file_downloaded = False
         # Choose where to save the updated script
@@ -176,21 +187,21 @@ def download_updates_function():
             download_folder = os.getcwd()
         # Just to confirm...
         Tk().withdraw()
-        messagebox.showinfo(title="Folder selected", message="The updated iMatrix Gcode Method Generator file will be downloaded in:\n\n'%s'" %(download_folder))
+        messagebox.showinfo(title="Folder selected", message="The updated script file will be downloaded in:\n\n'%s'" %(download_folder))
         try:
             # Import the library
             import urllib.request
             # Download the new file in the working directory
             os.chdir(download_folder)
-            urllib.request.urlretrieve (github_url, "%s (%s).py" %(script_file_name, online_version_number))
+            urllib.request.urlretrieve (github_url, "%s.py" %(script_file_name))
             file_downloaded = True
         except:
             pass
         if file_downloaded is True:
             Tk().withdraw()
-            messagebox.showinfo(title="Updated file retrieved!", message="The update file named\n%s\nhas been retrieved and placed in\n%s" %(script_file_name, download_folder))
+            messagebox.showinfo(title="Updated file retrieved!", message="The update file named\n\n%s\nhas been retrieved and placed in\n\n%s" %(script_file_name, download_folder))
             Tk().withdraw()
-            messagebox.showinfo(title="Changelog", message="The updated script contains the following changes:\n%s" %(online_change_log))
+            messagebox.showinfo(title="Changelog", message="The updated script contains the following changes:\n\n%s" %(online_change_log))
         else:
             Tk().withdraw()
             messagebox.showinfo(title="Connection problem", message="The updated script file could not be downloaded due to internet connection problems!\n\nManually download the updated script file at:\n\n%s" %(github_url))
@@ -201,6 +212,11 @@ def download_updates_function():
 
 
 
+
+### Downloading forced updates
+check_for_updates_function()
+if online_force_update is True:
+    download_updates_function()
 
 
 
