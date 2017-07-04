@@ -3,10 +3,10 @@
 #################### iMatrixSpray Method Gcode Generator ####################
 
 ### Program version (Specified by the program writer!!!!)
-program_version = "2017.06.14.0"
+program_version = "2017.07.04.0"
 ### Force update (in case something goes wrong after an update, when checking for updates and reading the variable force_update, the script can automatically download the latest working version, even if the rest of the script is corrupted, because it is the first thing that reads)
 force_update = False
-### GitHub URL where the R file is
+### GitHub URL where the PY file is
 github_url = "https://raw.githubusercontent.com/gmanuel89/iMatrixSpray/master/iMatrixSpray%20Method%20Gcode%20Generator.py"
 ### GitHub URL of the program's WIKI
 github_wiki_url = "https://github.com/gmanuel89/iMatrixSpray/wiki"
@@ -990,7 +990,9 @@ def dump_gcode_file_function():
             additional_waiting_time_after_spraying_subblock = [";;; additional waiting time after spraying\n"]
             for l in go_to_wash_position_block:
                 additional_waiting_time_after_spraying_subblock.append (l)
-            additional_waiting_time_after_spraying_subblock.append("; wait still\nG4 S%s\n" %(additional_waiting_time_after_each_spray_cycle[sol]))
+            additional_waiting_time_after_spraying_subblock.append("; wait still\n")
+            for t in range(int(additional_waiting_time_after_each_spray_cycle[sol])):
+                additional_waiting_time_after_spraying_subblock.append("G4 S1\n")
             # Leave a white line between blocks
             additional_waiting_time_after_spraying_subblock.append ("\n")
             # Add the sub-block to the final block
@@ -999,7 +1001,9 @@ def dump_gcode_file_function():
         additional_waiting_time_after_spraying_block = [";;; additional waiting time after spraying\n"]
         for l in go_to_wash_position_block:
             additional_waiting_time_after_spraying_block.append (l)
-        additional_waiting_time_after_spraying_block.append ("; wait still\nG4 S%s\n" %(additional_waiting_time_after_each_spray_cycle))
+        additional_waiting_time_after_spraying_block.append ("; wait still\n")
+        for t in range(int(additional_waiting_time_after_each_spray_cycle)):
+                additional_waiting_time_after_spraying_block.append("G4 S1\n")
         # Leave a white line between blocks
         additional_waiting_time_after_spraying_block.append ("\n")
 
@@ -1007,10 +1011,12 @@ def dump_gcode_file_function():
     try:
         waiting_phase_between_solutions_block_sol = []
         for sol in range(len(solution_to_use)-1):
-            waiting_phase_between_solutions_block = [";;;;;;;;;; waiting phase before switching between solutions\nG4 S%s\n\n" %waiting_phase_between_solutions_time[sol]]
+            waiting_phase_between_solutions_block = [";;;;;;;;;; waiting phase before switching between solutions\n"]
+            for t in range(int(waiting_phase_between_solutions_time[sol])):
+                waiting_phase_between_solutions_block.append("G4 S1\n")
             waiting_phase_between_solutions_block_sol.append(waiting_phase_between_solutions_block)
     except:
-        waiting_phase_between_solutions_block = None
+        waiting_phase_between_solutions_block = [";;;;;;;;;; waiting phase before switching between solutions\nG4 S0\n"]
 
 
     ##### INITIALISATION (same for all)
@@ -2118,6 +2124,9 @@ elif system_os == "Linux":
         ubuntu_title_bold = font.Font(family = "Ubuntu", size = title_font_size, weight = "bold")
         ubuntu_other_normal = font.Font(family = "Ubuntu", size = other_font_size, weight = "normal")
         ubuntu_other_bold = font.Font(family = "Ubuntu", size = other_font_size, weight = "bold")
+        cantarell_title_bold = font.Font(family = "Cantarell", size = title_font_size, weight = "bold")
+        cantarell_other_normal = font.Font(family = "Cantarell", size = other_font_size, weight = "normal")
+        cantarell_other_bold = font.Font(family = "Cantarell", size = other_font_size, weight = "bold")
         bitstream_charter_title_bold = font.Font(family = "Bitstream Charter", size = title_font_size, weight = "bold")
         bitstream_charter_other_normal = font.Font(family = "Bitstream Charter", size = other_font_size, weight = "normal")
         bitstream_charter_other_bold = font.Font(family = "Bitstream Charter", size = other_font_size, weight = "bold")
@@ -2125,10 +2134,10 @@ elif system_os == "Linux":
         liberation_other_normal = font.Font(family = "Liberation Sans", size = other_font_size, weight = "normal")
         liberation_other_bold = font.Font(family = "Liberation Sans", size = other_font_size, weight = "bold")
         # Use them in the GUI
-        title_font = bitstream_charter_title_bold
-        label_font = bitstream_charter_other_normal
-        entry_font = bitstream_charter_other_normal
-        button_font = bitstream_charter_other_bold
+        title_font = ubuntu_title_bold
+        label_font = ubuntu_other_normal
+        entry_font = ubuntu_other_normal
+        button_font = ubuntu_other_bold
     # Fedora
     elif "Fedora" in linux_distro or "Fedora" in os_version:
         # Define the fonts
@@ -2139,10 +2148,10 @@ elif system_os == "Linux":
         cantarell_other_normal = font.Font(family = "Cantarell", size = other_font_size, weight = "normal")
         cantarell_other_bold = font.Font(family = "Cantarell", size = other_font_size, weight = "bold")
         # Use them in the GUI
-        title_font = liberation_title_bold
-        label_font = liberation_other_normal
-        entry_font = liberation_other_normal
-        button_font = liberation_other_bold
+        title_font = cantarell_title_bold
+        label_font = cantarell_other_normal
+        entry_font = cantarell_other_normal
+        button_font = cantarell_other_bold
     # Other linux distros
     else:
         # Define the fonts
