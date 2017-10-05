@@ -3,7 +3,7 @@
 #################### iMatrixSpray Method Gcode Generator ####################
 
 ### Program version (Specified by the program writer!!!!)
-program_version = "2017.07.04.0"
+program_version = "2017.10.05.0"
 ### Force update (in case something goes wrong after an update, when checking for updates and reading the variable force_update, the script can automatically download the latest working version, even if the rest of the script is corrupted, because it is the first thing that reads)
 force_update = False
 ### GitHub URL where the PY file is
@@ -2074,7 +2074,7 @@ def close_program_function():
 
 ########## Main window
 window = Tk()
-window.title("iMatrixSpray Method Gcode Generator")
+window.title("iMatrixSpray Method G-code Generator")
 window.resizable(False, False)
 window.configure(background = "white")
 #window.wm_minsize(width=550, height=600)
@@ -2104,16 +2104,21 @@ if system_os == "Windows":
     # Define the fonts
     garamond_title_bold = font.Font(family = "Garamond", size = title_font_size, weight = "bold")
     garamond_other_normal = font.Font(family = "Garamond", size = other_font_size, weight = "normal")
+    garamond_other_bold = font.Font(family = "Garamond", size = other_font_size, weight = "bold")
     arial_title_bold = font.Font(family = "Arial", size = title_font_size, weight = "bold")
     arial_other_normal = font.Font(family = "Arial", size = other_font_size, weight = "normal")
+    arial_other_bold = font.Font(family = "Arial", size = other_font_size, weight = "bold")
     trebuchet_title_bold = font.Font(family = "Trebuchet MS", size = title_font_size, weight = "bold")
     trebuchet_other_normal = font.Font(family = "Trebuchet MS", size = other_font_size, weight = "normal")
     trebuchet_other_bold = font.Font(family = "Trebuchet MS", size = other_font_size, weight = "bold")
+    calibri_title_bold = font.Font(family = "Calibri", size = title_font_size, weight = "bold")
+    calibri_other_normal = font.Font(family = "Calibri", size = other_font_size, weight = "normal")
+    calibri_other_bold = font.Font(family = "Calibri", size = other_font_size, weight = "bold")
     # Use them in the GUI
-    title_font = trebuchet_title_bold
-    label_font = trebuchet_other_normal
-    entry_font = trebuchet_other_normal
-    button_font = trebuchet_other_bold
+    title_font = calibri_title_bold
+    label_font = calibri_other_normal
+    entry_font = calibri_other_normal
+    button_font = calibri_other_bold
 # Linux
 elif system_os == "Linux":
     # Retrieve the linux distribution
@@ -2189,7 +2194,7 @@ else:
 
 ########## Labels
 # Title / Info
-title_label = Button(window, text="iMatrixSpray Method Gcode Generator", relief = "flat", command = show_info, background = "white", font = title_font)
+title_label = Button(window, text="iMatrixSpray Method G-code Generator", relief = "flat", command = show_info, background = "white", font = title_font)
 # Other labels
 check_for_updates_label = Label(window, text=check_for_updates_value, font=label_font, background = "white", width = 30)
 solution_to_use_label = Label(window, text="Solution(s) to spray with\n(A,B,C or rinse) (default: A)\n", font=label_font, background = "white", width = 30)
